@@ -215,7 +215,8 @@ def lesson_page(page_num):
         page_num=page_num,
         total_pages=total_pages,
         lesson=lesson,
-        interactive_controls=interactive_controls
+        interactive_controls=interactive_controls,
+        lessons=LESSONS
     )
 
 if __name__ == "__main__":

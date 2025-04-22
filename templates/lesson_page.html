@@ -103,7 +103,9 @@
         <label for="jumpToLesson">Jump to:</label>
         <select id="jumpToLesson" onchange="location = this.value;">
             {% for i in range(1, total_pages+1) %}
-            <option value="{{ url_for('lesson_page', page_num=i) }}" {% if i == page_num %}selected{% endif %}>Lesson {{ i }}</option>
+            <option value="{{ url_for('lesson_page', page_num=i) }}" {% if i == page_num %}selected{% endif %}>
+                {{ lessons[i]['title'] }}
+            </option>
             {% endfor %}
         </select>
     </div>
