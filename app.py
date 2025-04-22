@@ -7,8 +7,16 @@ app = Flask(__name__)
 MY_NAME = "Abraham Alemu"
 
 BASE_DIR = os.path.dirname(__file__)
+
+LESSONS = {
+    1:{"title" : "..."},
+    2:{"title" : "...."},
+    3:{"title" : "....."}
+}
+
 with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
     QUIZ = json.load(f)
+
 
 answers = []
 
@@ -51,5 +59,20 @@ def quiz_result():
     score = f"{correct}/{len(QUIZ)}"
     return render_template("result.html", score=score)
 
+
+@app.route("/lesson/<int:page_num>")
+def lesson_page(page_num):
+    total_pages = len(LESSONS)
+
+    if page_num not in LESSONS:
+        return redirect(url_for("lesson_page.html", page_num=1))
+
+    lesson = LESSONS[page_num]
+    return render_template(
+        "lesson_page.html",
+        page_num=page_num,
+        total_pages=total_pages,
+        lesson=lesson
+    )
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
