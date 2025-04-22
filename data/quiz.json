@@ -1,0 +1,56 @@
+{
+    "1": {
+        "text": "Your photo is too dark. Which slider do you adjust first?",
+        "choices": [
+            {
+                "value": "exposure",
+                "label": "Exposure"
+            },
+            {
+                "value": "contrast",
+                "label": "Contrast"
+            },
+            {
+                "value": "warmth",
+                "label": "Warmth"
+            }
+        ],
+        "correct": "exposure"
+    },
+    "2": {
+        "text": "Your photo has an orange tint. Which tool fixes color cast?",
+        "choices": [
+            {
+                "value": "warmth",
+                "label": "Warmth (Temperature)"
+            },
+            {
+                "value": "saturation",
+                "label": "Saturation"
+            },
+            {
+                "value": "exposure",
+                "label": "Exposure"
+            }
+        ],
+        "correct": "warmth"
+    },
+    "3": {
+        "text": "Your horizon is tilted. Which feature do you use?",
+        "choices": [
+            {
+                "value": "crop_rotate",
+                "label": "Crop & Rotate"
+            },
+            {
+                "value": "brilliance",
+                "label": "Brilliance"
+            },
+            {
+                "value": "vignette",
+                "label": "Vignette"
+            }
+        ],
+        "correct": "crop_rotate"
+    }
+}

@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+{% block content %}
+<nav class="menu-bar mb-4">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('home_page') }}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Lesson</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="row align-items-center">
+    <div class="col-md-6">
+        <h1 class="page-title">Home Page</h1>
+        <ul class="home-list">
+            <li>Let’s learn how to make your boring dull pictures into stunning, gorgeous images! :)</li>
+            <li>For each tool, we will use this picture as our canvas.</li>
+        </ul>
+    </div>
+
+    <div class="col-md-6 text-center">
+        <img src="{{ url_for('static', filename='img/canvas.png') }}" alt="Canvas photo"
+            class="img-fluid rounded mb-4 canvas-img">
+        <br>
+        <a href="{{ url_for('quiz_page', q_num=1) }}" class="btn start-btn">
+            Start
+        </a>
+    </div>
+</div>
+{% endblock %}
