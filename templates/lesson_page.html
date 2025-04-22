@@ -1,6 +1,20 @@
 {% extends "index.html" %}
 
 {% block content %}
+<nav class="menu-bar mb-4">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Lesson</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
+        </li>
+    </ul>
+</nav>
+
 <div class="lesson-page">
     <h1>Lesson {{ page_num }}: {{ lesson['title'] }}</h1>
     <p>{{ lesson['content'] }}</p>
