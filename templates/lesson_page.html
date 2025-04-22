@@ -1,6 +1,11 @@
 {% extends "index.html" %}
 
 {% block content %}
+
+<script>
+    var interactiveControls = {{ interactive_controls | tojson }};
+</script>
+
 <nav class="menu-bar mb-4">
     <ul class="nav">
         <li class="nav-item">
@@ -63,11 +68,12 @@
             <div class="col-md-4 mb-4">
                 <label for="{{ control }}Range" class="form-label">{{ control|capitalize }}</label>
                 <input type="range" class="form-range" min="0" max="100" id="{{ control }}Range">
+                <p class="text-center" id="{{ control }}-value">0</p>
             </div>
             {% endfor %}
         </div>
         <div class="text-center">
-            <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit Image" class="img-fluid rounded">
+            <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit Image" class="img-fluid rounded" style="max-width: 600px; height: auto;">
         </div>
     </div>
     {% endif %}
@@ -103,5 +109,6 @@
     </div>
 
 </div>
+
 
 {% endblock %}
