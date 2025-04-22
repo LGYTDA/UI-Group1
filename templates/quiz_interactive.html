@@ -1,0 +1,106 @@
+{% extends "index.html" %}
+{% block content %}
+
+<!-- Menu Bar -->
+<nav class="menu-bar mb-4">
+    <ul class="nav">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('home_page') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Lesson</a></li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="row align-items-start mb-5">
+    <!-- Left Column: Question & Icons -->
+    <div class="col-md-6">
+        <h1 class="page-title">Image 1</h1>
+        <p class="lead">
+            Which 3 editing tools would we need to use to transition it to the new image?
+        </p>
+        <div class="icons-grid">
+            {% for tool in [
+            {'id':'shadows','label':'Shadows'},
+            {'id':'brilliance','label':'Brilliance'},
+            {'id':'exposure','label':'Exposure'},
+            {'id':'vibrance','label':'Vibrance'},
+            {'id':'contrast','label':'Contrast'},
+            {'id':'sharpness','label':'Sharpness'},
+            {'id':'brightness','label':'Brightness'},
+            {'id':'definition','label':'Definition'},
+            {'id':'tint','label':'Tint'},
+            {'id':'saturation','label':'Saturation'},
+            {'id':'highlights','label':'Highlights'},
+            {'id':'black_point','label':'Black Point'},
+            {'id':'warmth','label':'Warmth'}
+            ] %}
+            <div class="icon-wrapper" data-tool="{{ tool.id }}">
+                <div class="icon-circle mb-1">
+                    <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}" alt="{{ tool.label }}">
+                    <span class="feedback-icon"></span>
+                </div>
+                <div class="icon-label">{{ tool.label }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Right Column: RAW & Edited Side‑by‑Side -->
+    <div class="col-md-6">
+        <div class="row">
+            <!-- RAW Photo -->
+            <div class="col-6 text-center">
+                <h4>RAW Photo</h4>
+                <img id="raw-img" src="{{ url_for('static', filename='img/icons/raw1.jpg') }}"
+                    class="img-fluid combo-img" alt="Raw Photo">
+            </div>
+            <!-- Edited Photo -->
+            <div class="col-6 text-center">
+                <h4>Edited Photo</h4>
+                <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited1.jpg') }}"
+                    class="img-fluid combo-img" alt="Edited Photo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Next Button -->
+<div class="text-center">
+    <a id="next-btn" href="{{ url_for('quiz_result') }}" class="btn start-btn" style="display:none;">
+        Next
+    </a>
+</div>
+
+<script>
+    $(function () {
+        const correctTools = {{ correct_tools| tojson
+    }};
+    const codeMap = { black_point: 'blk', brilliance: 'bri', exposure: 'exp' };
+    let correctCount = 0, chosen = new Set(), applied = [];
+    const comboBase = "{{ url_for('static', filename='img/combos') }}/";
+
+    $('.icon-wrapper').click(function () {
+        const tool = $(this).data('tool');
+        if (chosen.has(tool)) return;
+        chosen.add(tool);
+
+        const fb = $(this).find('.feedback-icon');
+        if (correctTools.includes(tool)) {
+            fb.addClass('check').text('✓');
+            correctCount++;
+            applied.push(codeMap[tool]);
+            const fname = 'q1-' + applied.join('-') + '.jpg';
+            $('#edited-img').attr('src', comboBase + fname);
+        } else {
+            fb.addClass('wrong').text('✕');
+        }
+
+        if (correctCount === correctTools.length) {
+            $('#next-btn').fadeIn();
+        }
+    });
+});
+</script>
+
+{% endblock %}

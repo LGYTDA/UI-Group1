@@ -1,6 +1,7 @@
 {% extends "index.html" %}
-
 {% block content %}
+
+<!-- Menu Bar -->
 <nav class="menu-bar mb-4">
     <ul class="nav">
         <li class="nav-item">
@@ -16,15 +17,17 @@
 </nav>
 
 <div class="row align-items-start mb-5">
+    <!-- Left Column -->
     <div class="col-md-6">
-        <h1 class="page-title">Quiz: Combining out Tools</h1>
+        <h1 class="page-title">Quiz: Combining our Tools</h1>
         <ul class="home-list">
             <li>You will be given a raw (unedited) photo, and a final edited image.</li>
-            <li>You’re going to find what 3 of the 14 editing tools were used to enhance the image.</li>
-            <li>You get a score out of 9 with each correct tool being scored as 1 point.</li>
+            <li>You’re going to find which 3 of the 14 editing tools were used to enhance the image.</li>
+            <li>You get a score out of 9, with each correct tool scored as 1 point.</li>
         </ul>
     </div>
 
+    <!-- Right Column: Icons Grid -->
     <div class="col-md-6">
         <!-- Row 1: four tools, evenly spaced -->
         <div class="row mb-4 justify-content-around">
@@ -116,7 +119,7 @@
             </div>
         </div>
 
-        <!-- Row 4: single centered Black Point -->
+        <!-- Row 4: centered Black Point -->
         <div class="row">
             <div class="col-4 offset-4 text-center">
                 <div class="icon-circle mb-1">
@@ -127,4 +130,12 @@
         </div>
     </div>
 </div>
+
+<!-- Start Quiz button -->
+<div class="text-center">
+    <a href="{{ url_for('quiz_interactive', q_num=1) }}" class="btn start-btn">
+        Start Quiz
+    </a>
+</div>
+
 {% endblock %}
