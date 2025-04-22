@@ -1,24 +1,23 @@
 {% extends "index.html" %}
 {% block content %}
 
-<!-- Menu Bar -->
+<!-- Prevent the global app.js from attaching here -->
+<script>window.skipAppJs = true;</script>
+
 <nav class="menu-bar mb-4">
     <ul class="nav">
         <li class="nav-item"><a class="nav-link" href="{{ url_for('home_page') }}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a></li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
-        </li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('quiz_page', q_num=q_num) }}">Quiz</a></li>
     </ul>
 </nav>
 
 <div class="row align-items-start mb-5">
-    <!-- Left Column: Question & Icons -->
+
+    <!-- Tools -->
     <div class="col-md-6">
-        <h1 class="page-title">Image 1</h1>
-        <p class="lead">
-            Which 3 editing tools would we need to use to transition it to the new image?
-        </p>
+        <h1 class="page-title">Image {{ q_num }}</h1>
+        <p class="lead">Which 3 editing tools would we need to use?</p>
         <div class="icons-grid">
             {% for tool in [
             {'id':'shadows','label':'Shadows'},
@@ -35,69 +34,120 @@
             {'id':'black_point','label':'Black Point'},
             {'id':'warmth','label':'Warmth'}
             ] %}
-            <div class="icon-wrapper" data-tool="{{ tool.id }}">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}" alt="{{ tool.label }}">
-                    <span class="feedback-icon"></span>
-                </div>
-                <div class="icon-label">{{ tool.label }}</div>
+            <div class="icon-wrapper">
+                <input type="checkbox" id="tool-{{ tool.id }}" name="tools" value="{{ tool.id }}">
+                <label for="tool-{{ tool.id }}">
+                    <div class="icon-circle">
+                        <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}"
+                            alt="{{ tool.label }}">
+                        <span class="feedback-icon"></span>
+                    </div>
+                    <div class="icon-label">{{ tool.label }}</div>
+                </label>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Right Column: RAW & Edited Side‑by‑Side -->
+    <!-- Previews -->
     <div class="col-md-6">
         <div class="row">
-            <!-- RAW Photo -->
             <div class="col-6 text-center">
-                <h4>RAW Photo</h4>
-                <img id="raw-img" src="{{ url_for('static', filename='img/icons/raw1.jpg') }}"
-                    class="img-fluid combo-img" alt="Raw Photo">
+                <h4 id="preview-label">RAW Photo</h4>
+                <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}"
+                    class="img-fluid combo-img" alt="RAW Photo">
             </div>
-            <!-- Edited Photo -->
             <div class="col-6 text-center">
                 <h4>Edited Photo</h4>
-                <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited1.jpg') }}"
+                <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
                     class="img-fluid combo-img" alt="Edited Photo">
             </div>
         </div>
     </div>
+
 </div>
 
-<!-- Next Button -->
-<div class="text-center">
-    <a id="next-btn" href="{{ url_for('quiz_result') }}" class="btn start-btn" style="display:none;">
+<!-- Controls -->
+<div class="text-center mb-4">
+    <button id="check-btn" class="btn btn-primary" disabled>Check Response</button>
+    <a id="next-btn" href="{{ url_for('quiz_result') }}" class="btn start-btn" style="display:none; margin-left:1rem;">
         Next
     </a>
 </div>
 
 <script>
-    $(function () {
-        const correctTools = {{ correct_tools| tojson
+    document.addEventListener("DOMContentLoaded", function () {
+        const correctTools = {{ correct_tools | tojson
     }};
+    const maxSelect = correctTools.length;
     const codeMap = { black_point: 'blk', brilliance: 'bri', exposure: 'exp' };
-    let correctCount = 0, chosen = new Set(), applied = [];
-    const comboBase = "{{ url_for('static', filename='img/combos') }}/";
+    const comboBase = "{{ url_for('static', filename='img/icons/combos') }}/";
 
-    $('.icon-wrapper').click(function () {
-        const tool = $(this).data('tool');
-        if (chosen.has(tool)) return;
-        chosen.add(tool);
+    const checkBtn = document.getElementById("check-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const previewLabel = document.getElementById("preview-label");
+    const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
+    const rawImg = document.getElementById("raw-img");
 
-        const fb = $(this).find('.feedback-icon');
-        if (correctTools.includes(tool)) {
-            fb.addClass('check').text('✓');
-            correctCount++;
-            applied.push(codeMap[tool]);
-            const fname = 'q1-' + applied.join('-') + '.jpg';
-            $('#edited-img').attr('src', comboBase + fname);
+    // enable exactly 3, then allow Check
+    inputs.forEach(i => i.addEventListener("change", () => {
+        const cnt = inputs.filter(x => x.checked).length;
+        if (cnt > maxSelect) { i.checked = false; return; }
+        checkBtn.disabled = (cnt !== maxSelect);
+    }));
+
+    checkBtn.addEventListener("click", () => {
+        const selected = inputs.filter(i => i.checked).map(i => i.value);
+        let correctCount = 0;
+
+        // mark ✓/✕
+        selected.forEach(tool => {
+            const wrapper = document.getElementById(`tool-${tool}`).closest(".icon-wrapper");
+            const fb = wrapper.querySelector(".feedback-icon");
+            if (correctTools.includes(tool)) {
+                correctCount++;
+                fb.classList.add("check");
+                fb.textContent = "✓";
+            } else {
+                fb.classList.add("wrong");
+                fb.textContent = "✕";
+            }
+        });
+
+        // one alert
+        alert(`You got ${correctCount} out of ${maxSelect} correct!`);
+
+        // switch label from RAW to Updated
+        previewLabel.textContent = "Updated Photo";
+
+        // pickCodes string
+        const pickCodes = selected.map(t => codeMap[t] || t).join("-");
+        // update preview image from combos folder
+        rawImg.src = comboBase + `q{{q_num}}-${pickCodes}.jpg`;
+
+        if (correctCount === maxSelect) {
+            // lock and show Next
+            rawImg.src = "{{ url_for('static', filename='img/icons/combos/edited1.jpg') }}";
+            //rawImg.src = "static/img/icons/combos/edited1.jpg";
+            inputs.forEach(i => i.disabled = true);
+            checkBtn.disabled = true;
+            nextBtn.style.display = "inline-block";
         } else {
-            fb.addClass('wrong').text('✕');
-        }
-
-        if (correctCount === correctTools.length) {
-            $('#next-btn').fadeIn();
+            // reset for retry
+            setTimeout(() => {
+                previewLabel.textContent = "Updated Photo";
+                rawImg.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
+                inputs.forEach(i => {
+                    i.checked = false;
+                    i.disabled = false;
+                    const fb = document.getElementById(`tool-${i.value}`)
+                        .closest(".icon-wrapper")
+                        .querySelector(".feedback-icon");
+                    fb.classList.remove("check", "wrong");
+                    fb.textContent = "";
+                });
+                checkBtn.disabled = true;
+            }, 500);
         }
     });
 });

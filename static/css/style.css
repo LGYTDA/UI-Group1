@@ -211,4 +211,99 @@
     margin-bottom: 0rem;
 }
 
+.icon-wrapper.selected .icon-circle {
+    border-color: #ff822b;
+    box-shadow: 0 0 8px rgba(255, 130, 43, 0.4);
+    transform: scale(1.1);
+}
 
+/* correct tools get a green highlight */
+.icon-wrapper.correct .icon-circle {
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+
+/* wrong selections get a red highlight */
+.icon-wrapper.incorrect .icon-circle {
+    border-color: #dc3545;
+    box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
+}
+
+/* disable further clicks once submitted */
+.icon-wrapper.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* position the feedback icon in the corner */
+.icon-circle {
+    position: relative;
+}
+
+.feedback-icon {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 1.5rem;
+    pointer-events: none;
+}
+
+/* correct = green check */
+.feedback-icon.check {
+    color: #28a745;
+}
+
+/* wrong = red X */
+.feedback-icon.wrong {
+    color: #dc3545;
+}
+
+.icon-wrapper.selected .icon-circle {
+    border-color: #ff822b;
+    box-shadow: 0 0 8px rgba(255, 130, 43, 0.4);
+    transform: scale(1.05);
+}
+
+/* Quiz-Interactive Styles */
+.icon-wrapper {
+    display: inline-block;
+    margin: .5rem;
+    cursor: pointer;
+}
+
+.icon-wrapper input {
+    display: none;
+}
+
+.icon-wrapper input:checked+label .icon-circle {
+    border-color: #ff822b;
+    transform: scale(1.05);
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #d1a8a8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .2s, transform .2s;
+    position: relative;
+}
+
+.feedback-icon {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 1.5rem;
+    pointer-events: none;
+}
+
+.feedback-icon.check {
+    color: #28a745;
+}
+
+.feedback-icon.wrong {
+    color: #dc3545;
+}

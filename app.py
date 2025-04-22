@@ -5,21 +5,23 @@ from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
 MY_NAME = "Team 1"
-
 BASE_DIR = os.path.dirname(__file__)
 
-# (Your existing quiz data)
+# Load your quiz questions
 with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
     QUIZ = json.load(f)
 
+# Track non‑interactive answers
 answers = []
 
+# (Optional) legacy interactive map—you can leave this or remove it
 INTERACTIVE = {
     "1": ["exposure", "brilliance", "black point"],
     "2": ["exposure", "contrast", "warmth"],
     "3": ["shadows", "definition", "vignette"]
 }
-# (Optional) if you still have LESSONS and lesson_page)
+
+# Lesson content
 LESSONS = {
     1: {
         "title": "Smart Exposure",
@@ -115,9 +117,10 @@ def quiz_page(q_num):
 
 @app.route("/quiz_interactive/<int:q_num>")
 def quiz_interactive(q_num):
-    # Hard‑coded for Image 1
+    # raw image filename (e.g. raw1.jpg)
     raw_img       = f"raw{q_num}.jpg"
-    correct_tools = ["black_point", "brilliance", "exposure"]
+    # the three correct tools for this question
+    correct_tools = ["exposure", "brilliance", "black_point"]
     return render_template(
         "quiz_interactive.html",
         q_num=q_num,
