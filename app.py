@@ -86,7 +86,7 @@ LESSONS = {
     },
     # Practice content
     8: {
-        "title": "Practice Material - Play with Exposure",
+        "title": "Practice Material - Play with Exposure & Brilliance",
         "left_label": "Exposure",
         "left_explanation": "Play around with the overall exposure of your image to see how light and dark adjustments affect the mood.",
         "left_video": "Taabeer_rec.mov",
@@ -104,7 +104,7 @@ LESSONS = {
         "right_video": "Taabeer_rec.mov"
     },
     10: {
-        "title": "Practice Material - Color Play",
+        "title": "Practice Material - Play with Saturation & Vibrance",
         "left_label": "Saturation",
         "left_explanation": "Experiment with saturation to control how vibrant or muted the colors in your image appear.",
         "left_video": "Taabeer_rec.mov",
@@ -122,7 +122,7 @@ LESSONS = {
         "right_video": "Taabeer_rec.mov"
     },
     12: {
-        "title": "Practice Material - Vignette Experiment",
+        "title": "Practice Material - Explore Vignette & Contrast",
         "left_label": "Vignette",
         "left_explanation": "Play around with vignette settings to create a focus effect, darkening or lightening the edges of your photo.",
         "left_video": "Taabeer_rec.mov",
