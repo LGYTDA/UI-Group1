@@ -14,11 +14,49 @@
         </li>
     </ul>
 </nav>
+<div class="lesson-page vh-100">
+    <h1 class="lessonpage-title mb-3">{{ lesson['title'] }}</h1>
 
-<div class="lesson-page">
-    <h1>Lesson {{ page_num }}: {{ lesson['title'] }}</h1>
-    <p>{{ lesson['content'] }}</p>
-    <div class="navigation">
+    <div class="container flex-column">
+        <div class="row video-height-container">
+            <!-- First column - Left video -->
+            <div class="col-md-3 justify-content-center">
+                <div class="image-container align-items-center">
+                    <video class="example-video w-100" autoplay loop muted>
+                        <source src="{{ url_for('static', filename='img/' + lesson['left_video']) }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Second column - Left video explanation -->
+            <div class="col-md-3">
+                <div class="home-list align-self-start mt-0">
+                    <h4>{{ lesson['left_label'] }}</h4>
+                    <p>{{ lesson['left_explanation'] }}</p>
+                </div>
+            </div>
+
+            <!-- Third column - Right video explanation -->
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <div class="home-list mb-0">
+                    <h4>{{ lesson['right_label'] }}</h4>
+                    <p>{{ lesson['right_explanation'] }}</p>
+                </div>
+            </div>
+
+            <!-- Fourth column - Right video -->
+            <div class="col-md-3  justify-content-center">
+                <div class="image-container h-100 d-flex align-items-center">
+                    <video class="example-video w-100" autoplay loop muted >
+                        <source src="{{ url_for('static', filename='img/' + lesson['right_video']) }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="navigation mt-4 text-center">
         {% if page_num > 1 %}
         <a href="{{ url_for('lesson_page', page_num=page_num-1) }}" class="btn btn-primary">Previous</a>
         {% endif %}

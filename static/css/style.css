@@ -71,6 +71,12 @@
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
+.lessonpage-title {
+    color: #ff822b;
+    font-size: 2.3rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
 
 .home-list {
     list-style-type: disc;
@@ -180,3 +186,29 @@
     display: block;
     margin: 0 auto;
 }
+
+
+/* For column 2 (left explanation) */
+.col-md-3:nth-child(2) .text-content {
+    padding-top: 0;
+}
+
+/* For column 3 (right explanation) */
+.col-md-3:nth-child(3) .text-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.example-video {
+    max-height: 60vh;
+}
+
+.navigation {
+    flex-shrink: 0;
+}
+.video-height-container {
+    height: auto;
+    margin-bottom: 0rem;
+}
+
+
