@@ -12,15 +12,22 @@ with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
 
 answers = []
 
+INTERACTIVE = {
+    "1": ["highlights", "brilliance", "saturation"],
+    "2": ["exposure", "contrast", "warmth"],
+    "3": ["shadows", "definition", "vignette"]
+}
+
+
 @app.route("/")
 def home_page():
     answers.clear()
     return render_template("home.html", user=MY_NAME)
 
+
 @app.route("/quiz/<int:q_num>", methods=["GET", "POST"])
 def quiz_page(q_num):
     total = len(QUIZ)
-    # If past the last question, show results
     if q_num > total:
         return redirect(url_for("quiz_result"))
 
@@ -29,7 +36,6 @@ def quiz_page(q_num):
         return redirect(url_for("quiz_result"))
 
     if request.method == "POST":
-        # record answer and move on
         selected = request.form.get("choice")
         answers.append({"q": q_num, "choice": selected})
         return redirect(url_for("quiz_page", q_num=q_num + 1))
@@ -40,6 +46,26 @@ def quiz_page(q_num):
         total=total,
         question=question
     )
+
+
+@app.route("/quiz_interactive/<int:q_num>")
+def quiz_interactive(q_num):
+    """
+    Renders the fully interactive quiz page for image #q_num.
+    The template will use JS to let users click icons, show checks/Xs,
+    and apply CSS filters based on the INTERACTIVE mapping below.
+    """
+    raw_filename = f"raw{q_num}.jpg"
+    edited_filename = raw_filename  # start same; JS will toggle filter classes
+    correct_tools = INTERACTIVE.get(str(q_num), [])
+    return render_template(
+        "quiz_interactive.html",
+        q_num=q_num,
+        raw_img=raw_filename,
+        edited_img=edited_filename,
+        correct_tools=correct_tools
+    )
+
 
 @app.route("/quiz_result")
 def quiz_result():

@@ -103,6 +103,7 @@
 }
 
 .icon-circle {
+    position: relative;
     width: 80px;
     height: 80px;
     border: 3px solid #ccc;
@@ -115,7 +116,49 @@
 }
 
 .icon-circle img {
-    width: 100%;
-    height: 100%;
+    width: 60%;
+    height: 60%;
     object-fit: contain;
+}
+
+.icons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.icon-wrapper {
+    width: 80px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.feedback-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: .2rem;
+}
+
+.feedback-icon.check {
+    color: #28a745;
+}
+
+.feedback-icon.wrong {
+    color: #dc3545;
+}
+
+#edited-img.filter-highlights {
+    filter: brightness(1.2) contrast(0.9);
+}
+
+#edited-img.filter-brilliance {
+    filter: contrast(1.1) saturate(1.1);
+}
+
+#edited-img.filter-saturation {
+    filter: saturate(1.4);
 }
