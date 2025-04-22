@@ -16,7 +16,6 @@
 </nav>
 
 <div class="row align-items-start mb-5">
-    <!-- Left Column -->
     <div class="col-md-6">
         <h1 class="page-title">Quiz: Combining out Tools</h1>
         <ul class="home-list">
@@ -26,7 +25,6 @@
         </ul>
     </div>
 
-    <!-- Right Column: Icons Grid -->
     <div class="col-md-6">
         <!-- Row 1: four tools, evenly spaced -->
         <div class="row mb-4 justify-content-around">
@@ -118,7 +116,7 @@
             </div>
         </div>
 
-        <!-- Row 4: centered Black Point -->
+        <!-- Row 4: single centered Black Point -->
         <div class="row">
             <div class="col-4 offset-4 text-center">
                 <div class="icon-circle mb-1">
@@ -128,12 +126,5 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Start Quiz button -->
-<div class="text-center">
-    <a href="{{ url_for('quiz_interactive', q_num=1) }}" class="btn start-btn">
-        Start Quiz
-    </a>
 </div>
 {% endblock %}
