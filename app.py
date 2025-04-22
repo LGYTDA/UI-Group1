@@ -14,6 +14,10 @@ with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
 
 answers = []
 
+INTERACTIVE = {
+    "1": ["exposure", "brilliance", "black point"],
+    "2": ["exposure", "contrast", "warmth"],
+    "3": ["shadows", "definition", "vignette"]
 # (Optional) if you still have LESSONS and lesson_page)
 LESSONS = {
     1: {"title": "..."},
