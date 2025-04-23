@@ -28,7 +28,7 @@
                 <h4>{{ question['question'] }}</h4>
                 <div class="options">
                     {% for opt in ['option_1', 'option_2', 'option_3'] %}
-                    <div class="option" 
+                    <div class="option"
                          data-option="{{ opt }}"
                          data-page="{{ page_num }}">
                         {{ question[opt] }}
@@ -39,6 +39,9 @@
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
+            </div>
+            <div id="score-display" class="score-display">
+                Current Score: <span id="current-score">0</span>/{{ total_pages }}
             </div>
             {% endif %}
             {% if page_num==2 %}
@@ -58,6 +61,9 @@
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
+            </div>
+            <div id="score-display" class="score-display">
+                Current Score: <span id="current-score">0</span>/{{ total_pages }}
             </div>
             {% endif %}
             {% if page_num==3 %}
@@ -79,6 +85,9 @@
                     <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
                 </video>
             </div>
+            <div id="score-display" class="score-display">
+                Current Score: <span id="current-score">0</span>/{{ total_pages }}
+            </div>
             {% endif %}
             {% if page_num==4 %}
             <div class="col-md-3 justify-content-center">
@@ -98,6 +107,9 @@
                 <video autoplay loop muted>
                     <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
                 </video>
+            </div>
+            <div id="score-display" class="score-display">
+                Current Score: <span id="current-score">0</span>/{{ total_pages }}
             </div>
             {% endif %}
 
