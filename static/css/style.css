@@ -74,7 +74,7 @@
 .lessonpage-title {
     color: #ff822b;
     font-size: 2.3rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     text-align: center;
 }
 
@@ -306,4 +306,11 @@
 
 .feedback-icon.wrong {
     color: #dc3545;
+}
+.lessonpage-subtitle {
+    color: #6d6242;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
 }

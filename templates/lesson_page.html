@@ -20,16 +20,16 @@
     </ul>
 </nav>
 <div class="lesson-page vh-100">
-    <h1 class="lessonpage-title mb-3">{{ lesson['title'] }}</h1>
-
+    <h1 class="lessonpage-title">{{ lesson['title'] }}</h1>
+    {% if not lesson.get('is_practice', False) %}
+    <div class="lessonpage-subtitle">Follow along with the recording on your iPhone!</div>
     <div class="container flex-column">
+
         <div class="row video-height-container">
             <!-- First column - Left video -->
             <div class="col-md-3 justify-content-center">
-                <div class="image-container align-items-center">
-                    <video class="example-video w-100" autoplay loop muted>
-                        <source src="{{ url_for('static', filename='img/' + lesson['left_video']) }}" type="video/mp4">
-                    </video>
+                <div class="example-video w-100">
+                    <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['left_video']) }}" class="example-video w-100" alt="Example GIF">
                 </div>
             </div>
 
@@ -52,28 +52,49 @@
             <!-- Fourth column - Right video -->
             <div class="col-md-3  justify-content-center">
                 <div class="image-container h-100 d-flex align-items-center">
-                    <video class="example-video w-100" autoplay loop muted >
-                        <source src="{{ url_for('static', filename='img/' + lesson['right_video']) }}" type="video/mp4">
-                    </video>
+                    <div class="example-video w-100">
+                        <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['right_video']) }}" class="example-video w-100" alt="Example GIF">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    {% if interactive_controls %}
-    <div class="container mt-5">
-        <h4 class="text-center">Try It Yourself!</h4>
-        <div class="row justify-content-center">
-            {% for control in interactive_controls %}
-            <div class="col-md-4 mb-4">
-                <label for="{{ control }}Range" class="form-label">{{ control|capitalize }}</label>
-                <input type="range" class="form-range" min="0" max="100" id="{{ control }}Range">
-                <p class="text-center" id="{{ control }}-value">0</p>
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <!-- Left column - Left tool explanation -->
+            <div class="col-md-3">
+                <div class="home-list mt-3">
+                    <h4>{{ lesson['left_label'] }}</h4>
+                    <p>{{ lesson['left_explanation'] }}</p>
+                </div>
             </div>
-            {% endfor %}
-        </div>
-        <div class="text-center">
-            <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit Image" class="img-fluid rounded" style="max-width: 600px; height: auto;">
+
+            <!-- Middle column - Interactive image and sliders -->
+            <div class="col-md-6">
+                <h4 class="text-center">Try It Yourself!</h4>
+                <div class="row mt-4 justify-content-center">
+                    {% for control in interactive_controls %}
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ control }}Range" class="form-label">{{ control }}</label>
+                        <input type="range" class="form-range" min="0" max="100" id="{{ control }}Range">
+                        <p class="text-center" id="{{ control }}-value">0</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-3">
+                    <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+
+            <!-- Right column - Right tool explanation -->
+            <div class="col-md-3">
+                <div class="home-list mt-3">
+                    <h4>{{ lesson['right_label'] }}</h4>
+                    <p>{{ lesson['right_explanation'] }}</p>
+                </div>
+            </div>
         </div>
     </div>
     {% endif %}
