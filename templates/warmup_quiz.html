@@ -36,6 +36,14 @@
                     {% endfor %}
                 </div>
             </div>
+            <div id="right-explanation" class="d-none">
+                <h4>{{ question['right_label'] }}</h4>
+                <p>{{ question['right_explanation'] }}</p>
+            </div>
+            <div id="wrong-explanation" class="d-none">
+                <h4>{{ question['wrong_label'] }}</h4>
+                <p>{{ question['wrong_explanation'] }}</p>
+            </div>
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
@@ -57,7 +65,14 @@
                     {% endfor %}
                 </div>
             </div>
-
+            <div id="right-explanation" class="d-none">
+                <h4>{{ question['right_label'] }}</h4>
+                <p>{{ question['right_explanation'] }}</p>
+            </div>
+            <div id="wrong-explanation" class="d-none">
+                <h4>{{ question['wrong_label'] }}</h4>
+                <p>{{ question['wrong_explanation'] }}</p>
+            </div>
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
@@ -78,6 +93,14 @@
                     </div>
                     {% endfor %}
                 </div>
+            </div>
+            <div id="right-explanation" class="d-none">
+                <h4>{{ question['right_label'] }}</h4>
+                <p>{{ question['right_explanation'] }}</p>
+            </div>
+            <div id="wrong-explanation" class="d-none">
+                <h4>{{ question['wrong_label'] }}</h4>
+                <p>{{ question['wrong_explanation'] }}</p>
             </div>
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
@@ -102,6 +125,14 @@
                     {% endfor %}
                 </div>
             </div>
+            <div id="right-explanation" class="d-none">
+                <h4>{{ question['right_label'] }}</h4>
+                <p>{{ question['right_explanation'] }}</p>
+            </div>
+            <div id="wrong-explanation" class="d-none">
+                <h4>{{ question['wrong_label'] }}</h4>
+                <p>{{ question['wrong_explanation'] }}</p>
+            </div>
             <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <video autoplay loop muted>
@@ -114,20 +145,178 @@
             {% endif %}
 
         </div>
+    </div> <!--Container-->
+    {% if page_num == total_pages %}
+    <div id="final-score-section" class="final-score text-center mt-5" style="display: none;">
+        <h2 class="mb-3">Warmup Quiz Complete! 🎉</h2>
+        <div class="score-card p-4 bg-light rounded">
+            <h3>Your Final Score:</h3>
+            <div class="display-4 text-primary">
+                <span id="final-score">0</span>/{{ total_pages }}
+            </div>
+        </div>
+
+        <a href="{{ url_for('quiz_page', q_num=1) }}" 
+           class="btn btn-success"
+           onclick="resetQuiz()">
+            Start Main Quiz →
+        </a>
     </div>
+{% endif %}
+</div> <!--Warmup page-->
+
+
+
+
+<div class="navigation mt-4 text-center">
+    {% if page_num < total_pages %}
+        <a href="{{ url_for('warmup_page', page_num=page_num+1) }}" class="btn btn-primary">Next</a>
+    {% else %}
+        <a href="#final-score-section" class="btn btn-primary" onclick="showFinalScore()">View Score</a>
+    {% endif %}
 </div>
 
+            <script>
+                function resetQuiz() {
+    // Clear local storage
+    localStorage.removeItem('warmupQuiz');
+    
+    // Force reload to reset state
+    window.location.href = "{{ url_for('warmup_page', page_num=1) }}";
+}
+
+// Automatic reset when leaving the page
+// Automatic reset when leaving the page
 
 
+           
+                // Initialize client-side storage
+                let quizState = JSON.parse(localStorage.getItem('warmupQuiz') || '{}');
+                
+                // Initialize score
+                if (!quizState.score) quizState.score = 0;
+                if (!quizState.answered) quizState.answered = {};
+                
+                // Update display
+                document.getElementById('current-score').textContent = quizState.score;
+                
+                // Disable already answered questions
+                if (quizState.answered[{{ page_num }}]) {
+                    disableOptions();
+                }
+        
+                function handleAnswer(optionElement) {
+                    const pageNum = optionElement.dataset.page;
+                    const selectedOption = optionElement.dataset.option;
+                    
+                    // Prevent double answers
+                    if (quizState.answered[pageNum]) return;
+                    
+                    disableOptions();
+                    
+                    fetch('/submit_warmup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            page_num: parseInt(pageNum),
+                            selected: selectedOption
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        showFeedback(data);
+                        
+                        // Update local state
+                        if (data.is_correct) {
+                            quizState.score++;
+                            document.getElementById('current-score').textContent = quizState.score;
+                        }
+                        
+                        quizState.answered[pageNum] = true;
+                        localStorage.setItem('warmupQuiz', JSON.stringify(quizState));
+                    });
+                }
+        
+                function disableOptions() {
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.style.pointerEvents = 'none';
+                        opt.classList.add('disabled');
+                    });
+                }
+        
+                function showFeedback(data) {
+                    // Show appropriate feedback elements
+                    const rightDiv = document.getElementById('right-explanation');
+                    const wrongDiv = document.getElementById('wrong-explanation');
+                    
+                    if (data.is_correct) {
+                        rightDiv.classList.remove('d-none');
+                        wrongDiv.classList.add('d-none');
+                    } else {
+                        wrongDiv.classList.remove('d-none');
+                        rightDiv.classList.add('d-none');
+                    }
+                }
+        
+                // Add event listeners
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.addEventListener('click', () => handleAnswer(opt));
+                });
+                function showFinalScore() {
+    document.querySelector('.warmup-page .container').style.display = 'none';
+    document.getElementById('final-score-section').style.display = 'block';
+    document.getElementById('final-score').textContent = JSON.parse(localStorage.getItem('warmupQuiz') || '{}').score || 0;
+}
+    
+            </script>
+            <style>
+                .option {
+                    cursor: pointer;
+                    padding: 10px;
+                    margin: 5px;
+                    border: 2px solid #ddd;
+                    border-radius: 5px;
+                    transition: all 0.2s;
+                }
+                
+                .option:hover {
+                    background-color: #f0f0f0;
+                    border-color: #007bff;
+                }
+                
+                .option.disabled {
+                    cursor: not-allowed;
+                    opacity: 0.6;
+                    border-color: #ddd;
+                }
+                
+                .score-display {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
 
-            <div class="navigation mt-4 text-center">
-                {% if page_num > 1 %}
-                <a href="{{ url_for('warmup_page', page_num=page_num-1) }}" class="btn btn-primary">Previous</a>
-                {% endif %}
-            
-                {% if page_num < total_pages %}
-                <a href="{{ url_for('warmup_page', page_num=page_num+1) }}" class="btn btn-primary">Next</a>
-                {% endif %}
-            </div>
+.final-score {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.score-card {
+    border: 3px solid #007bff;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    max-width: 400px;
+    margin: 0 auto;
+}
+            </style>
 
 {% endblock %}
