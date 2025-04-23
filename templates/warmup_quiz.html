@@ -29,6 +29,23 @@
                 <p>{{ question['option_2'] }}</p>
                 <p>{{ question['option_3'] }}</p>
             </div>
+        </div>
+    </div>
+        {%if 'png' in question['photo']%}
+        <div class="col-md-4 d-flex flex-column justify-content-end">
+            <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}">
+        </div>
+        {% endif %}
+        {%if 'mov' in question['photo']%}
+        <div class="col-md-4 d-flex flex-column justify-content-end">
+        <video autoplay loop muted>
+            <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
+        </video>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 
             <div class="navigation mt-4 text-center">
                 {% if page_num > 1 %}
