@@ -14,21 +14,30 @@
         </li>
     </ul>
 </nav>
-<div class="warmup-page">
-    <h1>Warmup {{ page_num }}: {{ warmup['title'] }}</h1>
-    <p>{{ warmup['content'] }}</p>
-    <div class="navigation">
-        {% if page_num > 1 %}
-        <a href="{{ url_for('warmup_page', page_num=page_num-1) }}" class="btn btn-primary">Previous</a>
-        {% endif %}
+<div class="navigation mt-4 text-center">
+    {% if page_num > 1 %}
+    <a href="{{ url_for('warmup_page', page_num=page_num-1) }}" class="btn btn-primary">Previous</a>
+    {% endif %}
 
-        {% if page_num < total_pages %}
-        <a href="{{ url_for('warmup_page', page_num=page_num+1) }}" class="btn btn-primary">Next</a>
-        {% endif %}
-    </div>
+    {% if page_num < total_pages %}
+    <a href="{{ url_for('warmup_page', page_num=page_num+1) }}" class="btn btn-primary">Next</a>
+    {% endif %}
 </div>
 
 
+<div class="warmup-page vh-100">
+    <h1 class="warmuppage-title mb-3">{{ question['title'] }}</h1>
 
-</div>
+    <div class="container flex-column">
+        <div class="row video-height-container">
+            <!-- Left Column, Questions with Options -->
+            <div class="col-md-3 justify-content-center">
+                <h4>{{ question['question'] }}</h4>
+                <p>{{ question['option_1'] }}</p>
+                <p>{{ question['option_2'] }}</p>
+                <p>{{ question['option_3'] }}</p>
+            </div>
+
+
+
 {% endblock %}
