@@ -23,27 +23,84 @@
     <div class="container flex-column">
         <div class="row video-height-container">
             <!-- Left Column, Questions with Options -->
+            {% if page_num==1 %}
             <div class="col-md-3 justify-content-center">
                 <h4>{{ question['question'] }}</h4>
-                <p>{{ question['option_1'] }}</p>
-                <p>{{ question['option_2'] }}</p>
-                <p>{{ question['option_3'] }}</p>
+                <div class="options">
+                    {% for opt in ['option_1', 'option_2', 'option_3'] %}
+                    <div class="option" 
+                         data-option="{{ opt }}"
+                         data-page="{{ page_num }}">
+                        {{ question[opt] }}
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-
             <!-- Right Column, Image or Video -->
-            {% if 'png' in question['photo'] %}
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
             </div>
             {% endif %}
+            {% if page_num==2 %}
+            <div class="col-md-3 justify-content-center">
+                <h4>{{ question['question'] }}</h4>
+                <div class="options">
+                    {% for opt in ['option_1', 'option_2', 'option_3'] %}
+                    <div class="option" 
+                         data-option="{{ opt }}"
+                         data-page="{{ page_num }}">
+                        {{ question[opt] }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
 
-            {% if 'mov' in question['photo'] %}
+            <!-- Right Column, Image or Video -->
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
+            </div>
+            {% endif %}
+            {% if page_num==3 %}
+            <div class="col-md-3 justify-content-center">
+                <h4>{{ question['question'] }}</h4>
+                <div class="options">
+                    {% for opt in ['option_1', 'option_2', 'option_3'] %}
+                    <div class="option" 
+                         data-option="{{ opt }}"
+                         data-page="{{ page_num }}">
+                        {{ question[opt] }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Right Column, Image or Video -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <video autoplay loop muted>
                     <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
                 </video>
             </div>
             {% endif %}
+            {% if page_num==4 %}
+            <div class="col-md-3 justify-content-center">
+                <h4>{{ question['question'] }}</h4>
+                <div class="options">
+                    {% for opt in ['option_1', 'option_2', 'option_3'] %}
+                    <div class="option" 
+                         data-option="{{ opt }}"
+                         data-page="{{ page_num }}">
+                        {{ question[opt] }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Right Column, Image or Video -->
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <video autoplay loop muted>
+                    <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
+                </video>
+            </div>
+            {% endif %}
+
         </div>
     </div>
 </div>
