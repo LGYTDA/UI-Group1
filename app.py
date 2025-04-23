@@ -1,8 +1,10 @@
 import os
 import json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here' 
+
 
 MY_NAME = "Team 1"
 BASE_DIR = os.path.dirname(__file__)
@@ -243,6 +245,7 @@ WARMUP = {
         "option_1": "A) Brilliance",
         "option_2": "B) Exposure",
         "option_3": "C) Warmth",
+        "correct": "option_2",
         "right_label": "Correct!",
         "right_explanation": "Increasing Exposure lightens the overall image. This should be your first step when a photo is too dark, because it corrects the global brightness before fine-tuning other settings like Contrast or Brilliance.",
         "wrong_label": "Incorrect!",
@@ -255,6 +258,7 @@ WARMUP = {
         "option_1": "A) Exposure",
         "option_2": "B) Saturation",
         "option_3": "C) Warmth(Temperature)",
+        "correct": "option_3",
         "right_label": "Correct!",
         "right_explanation": "Yes! Adjusting the Warmth slider helps fix an orange or blue tint. Great job!Increasing or decreasing Warmth (or ‘Temperature’) balances the color to make it look more natural. Saturation can make colors more vibrant, but won’t correct an orange or blue tint.",
         "wrong_label": "Incorrect!",
@@ -267,6 +271,7 @@ WARMUP = {
         "option_1": "A) Brighter, Darker",
         "option_2": "B) Darker, Brighter",
         "option_3": "C) Darker, Darker",
+        "correct": "option_2",
         "right_label": "Correct!",
         "right_explanation": "Yes! Increasing shadows brightens the darker areas of an image. This adjustment lifts the shadow tones, making details in those areas more visible without changing the brightness of the lighter parts.",
         "wrong_label": "Incorrect!",
@@ -279,6 +284,7 @@ WARMUP = {
         "option_1": "A) Darker, Darker",
         "option_2": "B) Brighter, Darker",
         "option_3": "C) Brighter, Brighter",
+        "correct": "option_3",
         "right_label": "Correct!",
         "right_explanation": "Yes! Increasing highlights makes the already bright areas even brighter. This adjustment affects the lighter parts of an image, enhancing their brightness without changing the darker areas.",
         "wrong_label": "Incorrect!",
@@ -286,8 +292,22 @@ WARMUP = {
         "photo": "Taabeer_rec.mov"
     },
 }
-
-
+@app.route('/submit_warmup', methods=['POST'])
+def submit_warmup():
+    data = request.get_json()
+    page_num = data['page_num']
+    selected = data['selected']
+    question = WARMUP[page_num]
+    
+    is_correct = (selected == question['correct'])
+    
+    return jsonify({
+        'is_correct': is_correct,
+        'right_label': question['right_label'],
+        'right_explanation': question['right_explanation'],
+        'wrong_label': question['wrong_label'],
+        'wrong_explanation': question['wrong_explanation']
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
