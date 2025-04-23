@@ -61,9 +61,6 @@ $(function () {
             }
         });
 
-        // show result
-        alert(`You got ${score} out of ${total} correct!`);
-
         // lock everything down
         $(".icon-wrapper").off("click");
         $(this).prop("disabled", true);
