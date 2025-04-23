@@ -14,11 +14,11 @@ with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
 # Track non‑interactive answers
 answers = []
 
-# (Optional) legacy interactive map—you can leave this or remove it
-INTERACTIVE = {
-    "1": ["exposure", "brilliance", "black point"],
-    "2": ["exposure", "contrast", "warmth"],
-    "3": ["shadows", "definition", "vignette"]
+# Map q_num → the three correct tool‐IDs
+INTERACTIVE_CORRECT = {
+    1: ["exposure",  "brilliance",   "black_point"],
+    2: ["highlights","brilliance",   "saturation"],
+    3: ["highlights","black_point",  "brightness"]
 }
 
 # Lesson content
@@ -170,12 +170,16 @@ def quiz_page(q_num):
         question=question
     )
 
+
 @app.route("/quiz_interactive/<int:q_num>")
 def quiz_interactive(q_num):
-    # raw image filename (e.g. raw1.jpg)
-    raw_img       = f"raw{q_num}.jpg"
-    # the three correct tools for this question
-    correct_tools = ["exposure", "brilliance", "black_point"]
+    # make sure it’s a valid question
+    if q_num not in INTERACTIVE_CORRECT:
+        return redirect(url_for("quiz_result"))
+
+    raw_img      = f"raw{q_num}.jpg"
+    correct_tools = INTERACTIVE_CORRECT[q_num]
+
     return render_template(
         "quiz_interactive.html",
         q_num=q_num,
