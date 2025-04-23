@@ -1,8 +1,10 @@
 import os
 import json
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here' 
+
 
 MY_NAME = "Team 1"
 BASE_DIR = os.path.dirname(__file__)
@@ -296,8 +298,22 @@ WARMUP = {
         "photo": "Taabeer_rec.mov"
     },
 }
-
-
+@app.route('/submit_warmup', methods=['POST'])
+def submit_warmup():
+    data = request.get_json()
+    page_num = data['page_num']
+    selected = data['selected']
+    question = WARMUP[page_num]
+    
+    is_correct = (selected == question['correct'])
+    
+    return jsonify({
+        'is_correct': is_correct,
+        'right_label': question['right_label'],
+        'right_explanation': question['right_explanation'],
+        'wrong_label': question['wrong_label'],
+        'wrong_explanation': question['wrong_explanation']
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
