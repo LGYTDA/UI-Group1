@@ -226,5 +226,58 @@ def lesson_page(page_num):
         lessons=LESSONS
     )
 
+
+
+@app.route("/warmup/<int:page_num>")
+def warmup_page(page_num):
+    total_pages = len(WARMUP)
+    if page_num not in WARMUP:
+        return redirect(url_for("warmup_page", page_num=1))
+    question = WARMUP[page_num]
+
+    return render_template(
+        "warmup_quiz.html",
+        page_num=page_num,
+        total_pages=total_pages,
+        question=question,
+        questions=WARMUP
+    )
+WARMUP = {
+    1: {
+        "title": "Quiz Question # 1: Select the Correct Option",
+        "question": "Which slider would you adjust to increase the brightness in this photo?",
+        "option_1": "A) Brilliance",
+        "option_2": "B) Exposure",
+        "option_3": "C) Warmth",
+        "photo": "Warmup-pic-1.mov"
+    },
+    2: {
+        "title": "Quiz Question # 2: Select the Correct Option",
+       "question": "Your photo looks too orange. Which tool helps you fix this?",
+        "option_1": "A) Exposure",
+        "option_2": "B) Saturation",
+        "option_3": "C) Warmth(Temperature)",
+        "photo": "Warmup-pic-2.mov"
+    },
+    3: {
+        "title": "Quiz Question # 3: Fill in the Blanks",
+        "question": "Increasing shadows makes ____ areas ______",
+        "option_1": "A) Brighter, Darker",
+        "option_2": "B) Darker, Brighter",
+        "option_3": "C) Darker, Darker",
+        "photo": "Taabeer_rec.mov"
+    },
+    4: {
+        "title": "Quiz Question # 4: Fill in the Blanks",
+       "question": "Increasing higlights makes ____ areas ______",
+        "option_1": "A) Darker, Darker",
+        "option_2": "B) Brighter, Darker",
+        "option_3": "C) Brighter, Brighter",
+        "photo": "Taabeer_rec.mov"
+    },
+}
+
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
