@@ -249,6 +249,10 @@ WARMUP = {
         "option_1": "A) Brilliance",
         "option_2": "B) Exposure",
         "option_3": "C) Warmth",
+        "right_label": "Correct!",
+        "right_explanation": "Increasing Exposure lightens the overall image. This should be your first step when a photo is too dark, because it corrects the global brightness before fine-tuning other settings like Contrast or Brilliance.",
+        "wrong_label": "Incorrect!",
+        "wrong_explanation":"Not quite. Adjusting Contrast or Brilliance alone won’t fix an underexposed image. Try increasing the Exposure slider first!Contrast affects the difference between light and dark areas, while Brilliance can tweak shadows and highlights. But if the entire photo is too dark, you need to boost its overall brightness using Exposure.",
         "photo": "Warmup-pic-1.png"
     },
     2: {
@@ -257,6 +261,10 @@ WARMUP = {
         "option_1": "A) Exposure",
         "option_2": "B) Saturation",
         "option_3": "C) Warmth(Temperature)",
+        "right_label": "Correct!",
+        "right_explanation": "Yes! Adjusting the Warmth slider helps fix an orange or blue tint. Great job!Increasing or decreasing Warmth (or ‘Temperature’) balances the color to make it look more natural. Saturation can make colors more vibrant, but won’t correct an orange or blue tint.",
+        "wrong_label": "Incorrect!",
+        "wrong_explanation":"Not quite. Exposure brightens or darkens the whole image, and Saturation affects color intensity. Warmth specifically adjusts the color cast, so it’s the best tool here.",
         "photo": "Warmup-pic-2.png"
     },
     3: {
@@ -265,6 +273,10 @@ WARMUP = {
         "option_1": "A) Brighter, Darker",
         "option_2": "B) Darker, Brighter",
         "option_3": "C) Darker, Darker",
+        "right_label": "Correct!",
+        "right_explanation": "Yes! Increasing shadows brightens the darker areas of an image. This adjustment lifts the shadow tones, making details in those areas more visible without changing the brightness of the lighter parts.",
+        "wrong_label": "Incorrect!",
+        "wrong_explanation":"Not quite. The correct answer is Increasing shadows makes darker areas brighter A) Brighter, Darker – Incorrect: This is incorrect because increasing shadows does not make bright areas darker. It specifically affects the dark areas, making them brighter, not the other way around. C) Darker, Darker – Incorrect: This is incorrect because increasing shadows doesn’t make anything darker. It actually makes the dark areas brighter, helping to reveal more detail in those parts of the image.",
         "photo": "Taabeer_rec.mov"
     },
     4: {
@@ -273,6 +285,10 @@ WARMUP = {
         "option_1": "A) Darker, Darker",
         "option_2": "B) Brighter, Darker",
         "option_3": "C) Brighter, Brighter",
+        "right_label": "Correct!",
+        "right_explanation": "Yes! Increasing highlights makes the already bright areas even brighter. This adjustment affects the lighter parts of an image, enhancing their brightness without changing the darker areas.",
+        "wrong_label": "Incorrect!",
+        "wrong_explanation":"Not quite. Increasing highlights makes brighter areas brighter Incorrect Answer: A) Darker, Darker Explanation: This is incorrect because increasing highlights doesn't make anything darker. It specifically affects the bright parts of an image by making them brighter, not darker. Incorrect Answer: B) Brighter, Darker Explanation: This answer is wrong because increasing highlights does not make any area darker. It only affects the brighter areas, and it makes them even brighter, not darker.",
         "photo": "Taabeer_rec.mov"
     },
 }
