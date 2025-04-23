@@ -249,7 +249,7 @@ WARMUP = {
         "option_1": "A) Brilliance",
         "option_2": "B) Exposure",
         "option_3": "C) Warmth",
-        "photo": "Warmup-pic-1.mov"
+        "photo": "Warmup-pic-1.png"
     },
     2: {
         "title": "Quiz Question # 2: Select the Correct Option",
@@ -257,7 +257,7 @@ WARMUP = {
         "option_1": "A) Exposure",
         "option_2": "B) Saturation",
         "option_3": "C) Warmth(Temperature)",
-        "photo": "Warmup-pic-2.mov"
+        "photo": "Warmup-pic-2.png"
     },
     3: {
         "title": "Quiz Question # 3: Fill in the Blanks",
