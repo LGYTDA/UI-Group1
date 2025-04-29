@@ -314,3 +314,135 @@
     text-align: center;
     font-weight: bold;
 }
+
+/*dropdown styling*/
+/* Dropdown styling to match the theme */
+#jumpToLesson {
+    background-color: #b3a275;
+    color: #000;
+    border: 2px solid #a59763;
+    border-radius: 0.5rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 250px;
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+#jumpToLesson:hover, #jumpToLesson:focus {
+    border-color: #a59763;
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(179, 162, 117, 0.25);
+}
+
+#jumpToLesson option {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Change the dropdown option highlight color to orange */
+#jumpToLesson option:checked,
+#jumpToLesson option:hover {
+    background-color: #ff822b;
+    color: #000;
+}
+
+label[for="jumpToLesson"] {
+    color: #6d6242;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+/* Container spacing */
+.lesson-navigation {
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Ensure buttons maintain theme */
+.btn-primary {
+    background-color: #b3a275 !important;
+    border-color: #a59763 !important;
+    color: #000 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #ff822b !important;
+    border-color: #e67425 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    #jumpToLesson {
+        min-width: 200px;
+    }
+}
+
+/*lesson progress bar*/
+.progress-container {
+  width: 100%;
+  margin: 1rem auto 2rem;
+  text-align: center;
+}
+
+.progress-bar-wrapper {
+  height: 12px;
+  background-color: #e9e2d0;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid #a59763;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, #ff822b, #ffb13d);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(255, 130, 43, 0.3);
+}
+
+.progress-text {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #6d6242;
+  font-weight: 500;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shine 2s infinite;
+  z-index: 1;
+  pointer-events: none; /* lets clicks pass through */
+}
+
