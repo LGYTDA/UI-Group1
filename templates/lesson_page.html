@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block content %}
-
+<link href="https://fonts.cdnfonts.com/css/orbitron-2" rel="stylesheet">
 <script>
     var interactiveControls = {{ interactive_controls | tojson }};
 </script>
@@ -19,7 +19,7 @@
         </li>
     </ul>
 </nav>
-<div class="lesson-page vh-100">
+<div class="lesson-page vh-100" style="background-color: #FFF9DB;">
     <h1 class="lessonpage-title">{{ lesson['title'] }}</h1>
     <div class="progress-container">
         <div class="progress-bar-wrapper">
