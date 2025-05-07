@@ -1,11 +1,10 @@
 {# templates/quiz_interactive.html #}
 {% extends "index.html" %}
-
 {% block content %}
 <script>window.skipAppJs = true;</script>
 
 <style>
-    /* highlight correct / wrong icons with colored background */
+    /* highlight correct / wrong icons */
     .icon-circle.bg-correct {
         background-color: rgba(40, 167, 69, 0.2);
     }
@@ -26,7 +25,7 @@
 
         <!-- Tools grid in middle -->
         <div class="col-lg-6 col-md-8 col-sm-12">
-            <h1 class="page-title mb-2">Image {{ q_num }}</h1>
+            <h1 class="page-title mb-2">Challenge {{ q_num }}</h1>
             <p class="lead fst-italic mb-4">Which 3 editing tools would we need to use?</p>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tool in [
@@ -74,9 +73,7 @@
         <button id="try-again-btn" class="btn btn-secondary me-2" style="display:none;">Try Again</button>
         <a id="next-btn"
             href="{% if q_num < 3 %}{{ url_for('quiz_interactive', q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
-            class="btn start-btn" style="display:none;">
-            Next
-        </a>
+            class="btn start-btn" style="display:none;">Next</a>
     </div>
 </div>
 
@@ -84,7 +81,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         const qNum = {{ q_num }};
     const correct = {{ correct_tools | tojson }};
-    const maxSelect = correct.length;
+    const maxSel = correct.length;
     const codeMap = {
         black_point: "blk",
         brilliance: "bri",
@@ -101,65 +98,85 @@
     const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
     const rawImgEl = document.getElementById("raw-img");
 
-    // Enable "Check Response" only when exactly maxSelect are ticked
-    inputs.forEach(i =>
-        i.addEventListener("change", () => {
-            const cnt = inputs.filter(x => x.checked).length;
-            if (cnt > maxSelect) {
-                i.checked = false;
-                return;
+    // enable Check only when exactly maxSel boxes are checked
+    inputs.forEach(input => {
+        input.addEventListener("change", () => {
+            const cnt = inputs.filter(i => i.checked).length;
+            if (cnt > maxSel) {
+                input.checked = false;
+            } else {
+                checkBtn.disabled = (cnt !== maxSel);
             }
-            checkBtn.disabled = (cnt !== maxSelect);
-        })
-    );
+        });
+    });
 
     checkBtn.addEventListener("click", () => {
         let correctCount = 0;
         const selected = inputs.filter(i => i.checked).map(i => i.value);
+        const keepers = [];
 
-        // color each icon-circle based on correctness
+        // mark correct/wrong
         selected.forEach(tool => {
             const circle = document.querySelector(`#tool-${tool} + label .icon-circle`);
             if (correct.includes(tool)) {
                 correctCount++;
                 circle.classList.add("bg-correct");
+                document.getElementById(`tool-${tool}`).disabled = true;
+                keepers.push(tool);
             } else {
                 circle.classList.add("bg-wrong");
+                document.getElementById(`tool-${tool}`).checked = false;
             }
         });
 
-        // show intermediate combo
-        rawImgEl.src = comboBase
-            + "q" + qNum + "-"
-            + selected.map(t => codeMap[t] || t).join("-")
-            + ".jpg";
+        // only update RAW preview if at least one is correct
+        if (correctCount > 0) {
+            rawImgEl.src = comboBase
+                + "q" + qNum + "-"
+                + keepers.map(t => codeMap[t] || t).join("-")
+                + ".jpg";
+        }
 
-        if (correctCount === maxSelect) {
-            // perfect → final preview + Next
+        if (correctCount === maxSel) {
+            // all correct → show final
             rawImgEl.src = comboBase + "edited" + qNum + ".jpg";
             inputs.forEach(i => i.disabled = true);
             checkBtn.style.display = "none";
             tryBtn.style.display = "none";
             nextBtn.style.display = "inline-block";
         } else {
-            // wrong → show Try Again
+            // still missing → allow Try Again
             checkBtn.style.display = "none";
             tryBtn.style.display = "inline-block";
         }
     });
 
     tryBtn.addEventListener("click", () => {
-        // reset everything for another try
+        // clear only the wrong ones
         inputs.forEach(i => {
-            i.checked = false;
-            i.disabled = false;
-            const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
-            circle.classList.remove("bg-correct", "bg-wrong");
+            if (!correct.includes(i.value)) {
+                i.checked = false;
+                i.disabled = false;
+                document.querySelector(`#tool-${i.value} + label .icon-circle`)
+                    .classList.remove("bg-wrong");
+            }
         });
-        rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
+        // restore RAW to the partial combination of correct picks (if any)
+        const kept = inputs
+            .filter(i => i.disabled)   // those already locked-in correct
+            .map(i => i.value);
+        if (kept.length > 0) {
+            rawImgEl.src = comboBase
+                + "q" + qNum + "-"
+                + kept.map(t => codeMap[t] || t).join("-")
+                + ".jpg";
+        } else {
+            rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
+        }
+
+        checkBtn.style.display = "inline-block";
         checkBtn.disabled = true;
         tryBtn.style.display = "none";
-        checkBtn.style.display = "inline-block";
     });
 });
 </script>
