@@ -4,14 +4,6 @@
 <!-- prevent the global app.js from attaching here -->
 <script>window.skipAppJs = true;</script>
 
-<nav class="menu-bar mb-4">
-    <ul class="nav">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('home_page') }}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a></li>
-        <li class="nav-item"><a class="nav-link active" href="{{ url_for('quiz_page', q_num=q_num) }}">Quiz</a></li>
-    </ul>
-</nav>
-
 <div class="row align-items-start mb-5">
     <!-- Tools -->
     <div class="col-md-6">
@@ -77,8 +69,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const qNum = {{ q_num }
-    };
+        // <— fixed here: close Jinja with two braces and add the semicolon
+        const qNum = {{ q_num }};
     const correctTools = {{ correct_tools | tojson }};
     const maxSelect = correctTools.length;
     const codeMap = {
@@ -126,9 +118,6 @@
                 fb.textContent = "✕";
             }
         });
-
-        alert(`You got ${correctCount} out of ${maxSelect} correct!`);
-
         previewLabel.textContent = "Updated Photo";
 
         // intermediate combo
@@ -136,13 +125,11 @@
         rawImg.src = comboBase + "q" + qNum + "-" + pickCodes + ".jpg";
 
         if (correctCount === maxSelect) {
-            // final combo for this question
             rawImg.src = comboBase + "edited" + qNum + ".jpg";
             inputs.forEach(i => i.disabled = true);
             checkBtn.disabled = true;
             nextBtn.style.display = "inline-block";
         } else {
-            // reset for another try
             setTimeout(() => {
                 previewLabel.textContent = "RAW Photo";
                 rawImg.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
