@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
 :root {
     --color-exposure: #ffd43b;
     --color-contrast: #ffa94d;
@@ -586,9 +588,12 @@ body.quiz-intro-page {
     padding: .75rem 2.5rem;
 }
 
+
+
 /* ── global page background ───────────────────────────────────────── */
 body {
     background-color: rgb(254, 248, 217);
+    font-family: 'Open Sans', sans-serif;
 }
 
 /* ── full-width, taller & padded navbar ───────────────────────────── */
@@ -640,4 +645,34 @@ body {
     font-weight: bold;
     background-color: #ff822b;
     border-radius: .25rem;
+}
+
+/* ── headings & text styles ─────────────────────────────────────────── */
+.page-title,
+.quiz-title,
+.lessonpage-title {
+    font-weight: 400;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-title {
+    font-size: 3rem;
+}
+
+.lead,
+.fst-italic {
+    font-style: italic;
+    color: #555;
+}
+
+/* ── utility overrides ──────────────────────────────────────────────── */
+.btn.start-btn {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+
+.btn-primary {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
 }

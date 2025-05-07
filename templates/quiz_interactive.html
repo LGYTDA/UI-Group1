@@ -1,147 +1,130 @@
 {% extends "index.html" %}
 {% block content %}
-
-<!-- prevent the global app.js from attaching here -->
 <script>window.skipAppJs = true;</script>
 
-<div class="row align-items-start mb-5">
-    <!-- Tools -->
-    <div class="col-md-6">
-        <h1 class="page-title">Image {{ q_num }}</h1>
-        <p class="lead">Which 3 editing tools would we need to use?</p>
-        <div class="icons-grid">
-            {% for tool in [
-            {'id':'shadows','label':'Shadows'},
-            {'id':'brilliance','label':'Brilliance'},
-            {'id':'exposure','label':'Exposure'},
-            {'id':'vibrance','label':'Vibrance'},
-            {'id':'contrast','label':'Contrast'},
-            {'id':'sharpness','label':'Sharpness'},
-            {'id':'brightness','label':'Brightness'},
-            {'id':'definition','label':'Definition'},
-            {'id':'tint','label':'Tint'},
-            {'id':'saturation','label':'Saturation'},
-            {'id':'highlights','label':'Highlights'},
-            {'id':'black_point','label':'Black Point'},
-            {'id':'warmth','label':'Warmth'}
-            ] %}
-            <div class="icon-wrapper">
-                <input type="checkbox" id="tool-{{ tool.id }}" name="tools" value="{{ tool.id }}">
-                <label for="tool-{{ tool.id }}">
-                    <div class="icon-circle">
-                        <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}"
-                            alt="{{ tool.label }}">
-                        <span class="feedback-icon"></span>
-                    </div>
-                    <div class="icon-label">{{ tool.label }}</div>
-                </label>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<div class="container-fluid px-4">
+    <div class="row align-items-start">
 
-    <!-- Previews -->
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-6 text-center">
-                <h4 id="preview-label">RAW Photo</h4>
-                <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}"
-                    class="img-fluid combo-img" alt="RAW Photo">
-            </div>
-            <div class="col-6 text-center">
-                <h4>Edited Photo</h4>
-                <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
-                    class="img-fluid combo-img" alt="Edited Photo">
+        <!-- RAW photo on left -->
+        <div class="col-lg-3 col-md-4 col-sm-12 text-center mb-4">
+            <h5 class="fw-semibold">RAW Photo</h5>
+            <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}" class="img-fluid rounded"
+                style="max-height:60vh;" alt="RAW Photo">
+        </div>
+
+        <!-- Tools grid in middle -->
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <h1 class="page-title mb-2">Challenge {{ q_num }}</h1>
+            <p class="lead fst-italic mb-4">
+                Which 3 editing tools would we need to use?
+            </p>
+            <div class="d-flex flex-wrap justify-content-center">
+                {% for tool in [
+                {'id':'shadows','label':'Shadows'},
+                {'id':'highlights','label':'Highlights'},
+                {'id':'brilliance','label':'Brilliance'},
+                {'id':'exposure','label':'Exposure'},
+                {'id':'vignette','label':'Vignette'},
+                {'id':'contrast','label':'Contrast'},
+                {'id':'sharpness','label':'Sharpness'},
+                {'id':'brightness','label':'Brightness'},
+                {'id':'definition','label':'Definition'},
+                {'id':'tint','label':'Tint'},
+                {'id':'saturation','label':'Saturation'},
+                {'id':'vibrance','label':'Vibrance'},
+                {'id':'warmth','label':'Warmth'},
+                {'id':'black_point','label':'Black Point'}
+                ] %}
+                <div class="icon-wrapper mx-2 mb-4 text-center">
+                    <input type="checkbox" id="tool-{{ tool.id }}" name="tools" value="{{ tool.id }}">
+                    <label for="tool-{{ tool.id }}">
+                        <div class="icon-circle mb-1">
+                            <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}"
+                                alt="{{ tool.label }}">
+                            <span class="feedback-icon"></span>
+                        </div>
+                        <div class="icon-label">{{ tool.label }}</div>
+                    </label>
+                </div>
+                {% endfor %}
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Controls -->
-<div class="text-center mb-4">
-    <button id="check-btn" class="btn btn-primary" disabled>Check Response</button>
-    <a id="next-btn"
-        href="{% if q_num < 3 %}{{ url_for('quiz_interactive', q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
-        class="btn start-btn" style="display:none; margin-left:1rem;">
-        Next
-    </a>
+        <!-- Edited photo on right -->
+        <div class="col-lg-3 col-md-12 text-center mb-4">
+            <h5 class="fw-semibold">Edited Photo</h5>
+            <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
+                class="img-fluid rounded" style="max-height:60vh;" alt="Edited Photo">
+        </div>
+
+    </div>
+
+    <!-- Check / Next controls -->
+    <div class="text-center mt-4">
+        <button id="check-btn" class="btn btn-primary me-3" disabled>
+            Check Response
+        </button>
+        <a id="next-btn"
+            href="{% if q_num<3 %}{{ url_for('quiz_interactive',q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
+            class="btn start-btn" style="display:none;">
+            Next
+        </a>
+    </div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // <— fixed here: close Jinja with two braces and add the semicolon
+    document.addEventListener("DOMContentLoaded", () => {
         const qNum = {{ q_num }};
-    const correctTools = {{ correct_tools | tojson }};
+    const correctTools = {{ correct_tools| tojson }};
     const maxSelect = correctTools.length;
     const codeMap = {
-        black_point: "blk",
-        brilliance: "bri",
-        exposure: "exp",
-        highlights: "hl",
-        saturation: "sat",
-        brightness: "bright"
+        black_point: "blk", brilliance: "bri",
+        exposure: "exp", highlights: "hl",
+        saturation: "sat", brightness: "bright"
     };
     const comboBase = "{{ url_for('static', filename='img/icons/combos') }}/";
 
     const checkBtn = document.getElementById("check-btn");
     const nextBtn = document.getElementById("next-btn");
-    const previewLabel = document.getElementById("preview-label");
     const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
-    const rawImg = document.getElementById("raw-img");
+    const rawImgEl = document.getElementById("raw-img");
 
-    // enforce up to exactly maxSelect
-    inputs.forEach(i => i.addEventListener("change", () => {
-        const cnt = inputs.filter(x => x.checked).length;
-        if (cnt > maxSelect) {
-            i.checked = false;
-            return;
-        }
-        checkBtn.disabled = (cnt !== maxSelect);
-    }));
+    inputs.forEach(i =>
+        i.addEventListener("change", () => {
+            const cnt = inputs.filter(x => x.checked).length;
+            if (cnt > maxSelect) { i.checked = false; return; }
+            checkBtn.disabled = (cnt !== maxSelect);
+        })
+    );
 
     checkBtn.addEventListener("click", () => {
-        const selected = inputs.filter(i => i.checked).map(i => i.value);
         let correctCount = 0;
-
-        // feedback icons
+        const selected = inputs.filter(i => i.checked).map(i => i.value);
         selected.forEach(tool => {
-            const fb = document
-                .getElementById(`tool-${tool}`)
-                .closest(".icon-wrapper")
-                .querySelector(".feedback-icon");
+            const fb = document.querySelector(`#tool-${tool} + label .feedback-icon`);
             if (correctTools.includes(tool)) {
-                correctCount++;
-                fb.classList.add("check");
-                fb.textContent = "✓";
+                correctCount++; fb.classList.add("check"); fb.textContent = "✓";
             } else {
-                fb.classList.add("wrong");
-                fb.textContent = "✕";
+                fb.classList.add("wrong"); fb.textContent = "✕";
             }
         });
-        previewLabel.textContent = "Updated Photo";
 
-        // intermediate combo
-        const pickCodes = selected.map(t => codeMap[t] || t).join("-");
-        rawImg.src = comboBase + "q" + qNum + "-" + pickCodes + ".jpg";
+        // show intermediate combination
+        rawImgEl.src = comboBase + "q" + qNum + "-" + selected.map(t => codeMap[t] || t).join("-") + ".jpg";
 
         if (correctCount === maxSelect) {
-            rawImg.src = comboBase + "edited" + qNum + ".jpg";
+            // final combo
+            rawImgEl.src = comboBase + "edited" + qNum + ".jpg";
             inputs.forEach(i => i.disabled = true);
             checkBtn.disabled = true;
             nextBtn.style.display = "inline-block";
         } else {
             setTimeout(() => {
-                previewLabel.textContent = "RAW Photo";
-                rawImg.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
+                rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
                 inputs.forEach(i => {
-                    i.checked = false;
-                    i.disabled = false;
-                    const fb = document
-                        .getElementById(`tool-${i.value}`)
-                        .closest(".icon-wrapper")
-                        .querySelector(".feedback-icon");
-                    fb.classList.remove("check", "wrong");
-                    fb.textContent = "";
+                    i.checked = false; i.disabled = false;
+                    const fb = document.querySelector(`#tool-${i.value} + label .feedback-icon`);
+                    fb.classList.remove("check", "wrong"); fb.textContent = "";
                 });
                 checkBtn.disabled = true;
             }, 800);
@@ -149,5 +132,4 @@
     });
 });
 </script>
-
 {% endblock %}

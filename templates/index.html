@@ -4,12 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>iEdit</title>
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Open Sans import -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Your custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="{% if request.endpoint=='quiz_page' and request.view_args.get('q_num')==1 %}quiz-intro-page{% endif %}">
-    <!-- full-width, taller & padded navbar -->
+<body
+    class="{% if request.endpoint == 'quiz_page' and request.view_args.get('q_num') == 1 %}quiz-intro-page{% endif %}">
+    <!-- full-width, padded navbar -->
     <nav class="menu-bar">
         <span class="brand">iEdit</span>
         <ul class="nav">
@@ -18,7 +23,7 @@
                     href="{{ url_for('home_page') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.endpoint in ['lesson_page','intro_page'] %}active{% endif %}"
+                <a class="nav-link {% if request.endpoint=='lesson_page' %}active{% endif %}"
                     href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a>
             </li>
             <li class="nav-item">
