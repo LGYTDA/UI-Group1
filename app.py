@@ -255,7 +255,7 @@ def warmup_page(page_num):
     )
 WARMUP = {
     1: {
-        "title": "Quiz Question # 1: Select the Correct Option",
+        "title": "Warmup Quiz Question # 1: Select the Correct Option",
         "question": "Which slider would you adjust to increase the brightness in this photo?",
         "option_1": "A) Brilliance",
         "option_2": "B) Exposure",
@@ -268,7 +268,7 @@ WARMUP = {
         "photo": "Warmup-pic-1.png"
     },
     2: {
-        "title": "Quiz Question # 2: Select the Correct Option",
+        "title": "Warmup Quiz Question # 2: Select the Correct Option",
        "question": "Your photo looks too orange. Which tool helps you fix this?",
         "option_1": "A) Exposure",
         "option_2": "B) Saturation",
@@ -281,7 +281,7 @@ WARMUP = {
         "photo": "Warmup-pic-2.png"
     },
     3: {
-        "title": "Quiz Question # 3: Fill in the Blanks",
+        "title": "Warmup Quiz Question # 3: Fill in the Blanks",
         "question": "Increasing shadows makes ____ areas ______",
         "option_1": "A) Brighter, Darker",
         "option_2": "B) Darker, Brighter",
@@ -294,7 +294,7 @@ WARMUP = {
         "photo": "Taabeer_rec.mov"
     },
     4: {
-        "title": "Quiz Question # 4: Fill in the Blanks",
+        "title": "Warmup Quiz Question # 4: Fill in the Blanks",
        "question": "Increasing higlights makes ____ areas ______",
         "option_1": "A) Darker, Darker",
         "option_2": "B) Brighter, Darker",
