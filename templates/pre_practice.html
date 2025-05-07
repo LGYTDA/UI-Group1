@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block content %}
+<link href="https://fonts.cdnfonts.com/css/orbitron-2" rel="stylesheet">
+
+<nav class="menu-bar mb-4">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link fs-4" href="{{ url_for('home_page') }}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fs-4" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fs-4" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="lesson-page vh-100 d-flex flex-column align-items-center justify-content-center px-4" style="background-color: #FFF9DB;">
+    <div class="container py-4">
+        <div class="lessonpage-subtitle text-center mb-5" style="font-size: 2.5rem; font-weight: 600;">Now time for some practice material!</div>
+
+        <div class="row mb-5">
+            <div class="col-md-12 text-center">
+                <p style="font-size: 1.8rem; line-height: 1.5;">Try editing the pictures using the sliders and explore how they work before taking the quiz.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-0 mb-3">
+        <a href="{{ url_for('lesson_page', page_num=8) }}" class="btn btn-primary btn-lg" style="font-size: 1.5rem; padding: 0.75rem 2rem;">Let's Go</a>
+    </div>
+</div>
+{% endblock %}

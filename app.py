@@ -139,6 +139,14 @@ LESSONS = {
     }
 }
 
+@app.route("/intro")
+def intro_page():
+    return render_template("intro_page.html")
+
+@app.route("/pre_practice")
+def pre_practice_page():
+    return render_template("pre_practice.html")
+
 @app.route("/")
 def home_page():
     answers.clear()
@@ -194,6 +202,13 @@ def quiz_result():
 
 @app.route("/lesson/<int:page_num>")
 def lesson_page(page_num):
+    # Redirect to intro page if coming from home
+    if page_num == 1 and request.referrer and 'home' in request.referrer:
+        return redirect(url_for("intro_page"))
+
+    # Redirect to pre-practice page when moving from lesson 7 to practice lesson 8
+    if page_num == 8 and request.referrer and 'lesson/7' in request.referrer:
+        return redirect(url_for("pre_practice_page"))
     total_pages = len(LESSONS)
     if page_num not in LESSONS:
         return redirect(url_for("lesson_page", page_num=1))

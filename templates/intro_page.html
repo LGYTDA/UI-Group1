@@ -1,0 +1,89 @@
+{% extends "index.html" %}
+{% block content %}
+<link href="https://fonts.cdnfonts.com/css/orbitron-2" rel="stylesheet">
+
+<nav class="menu-bar mb-4">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="lesson-page vh-100 d-flex flex-column align-items-center justify-content-center px-4" style="background-color: #FFF9DB;">
+    <div class="container py-4">
+        <div class="lessonpage-subtitle text-center mb-4" style="font-size: 1.5rem; font-weight: 500;">Let's start with lessons on what each tool helps us achieve along with demonstrations of what each slider creates!</div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-center">
+                <p class="fs-5">The iPhone editing tools have been grouped thematically as follows to make learning easier:</p>
+            </div>
+        </div>
+
+        <div class="row mb-2 justify-content-center">
+            <!-- Left Column -->
+            <div class="col-md-5">
+                <div class="home-list p-2">
+                    <h4>1. Smart Exposure</h4>
+                    <ul>
+                        <li>Exposure</li>
+                        <li>Brilliance</li>
+                    </ul>
+
+                    <h4>2. Dynamic Range Rescue</h4>
+                    <ul>
+                        <li>Highlights</li>
+                        <li>Shadows</li>
+                    </ul>
+
+                    <h4>3. Midtone Control</h4>
+                    <ul>
+                        <li>Brightness</li>
+                        <li>Contrast</li>
+                    </ul>
+
+                    <h4>4. Deep Tone Finish</h4>
+                    <ul>
+                        <li>Black Point</li>
+                        <li>Vignette</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-5">
+                <div class="home-list p-2">
+                    <h4>5. White Balance</h4>
+                    <ul>
+                        <li>Warmth</li>
+                        <li>Tint</li>
+                    </ul>
+
+                    <h4>6. Color Enhancement</h4>
+                    <ul>
+                        <li>Saturation</li>
+                        <li>Vibrance</li>
+                    </ul>
+
+                    <h4>7. Texture Tweaks</h4>
+                    <ul>
+                        <li>Sharpness</li>
+                        <li>Definition</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-0 mb-3">
+        <a href="{{ url_for('lesson_page', page_num=1) }}" class="btn btn-primary btn-lg">Continue to Lessons</a>
+    </div>
+</div>
+{% endblock %}
