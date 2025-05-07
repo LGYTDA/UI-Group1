@@ -1,23 +1,33 @@
+{# templates/quiz_interactive.html #}
 {% extends "index.html" %}
+
 {% block content %}
 <script>window.skipAppJs = true;</script>
 
+<style>
+    /* highlight correct / wrong icons with colored background */
+    .icon-circle.bg-correct {
+        background-color: rgba(40, 167, 69, 0.2);
+    }
+
+    .icon-circle.bg-wrong {
+        background-color: rgba(220, 53, 69, 0.2);
+    }
+</style>
+
 <div class="container-fluid px-4">
     <div class="row align-items-start">
-
         <!-- RAW photo on left -->
         <div class="col-lg-3 col-md-4 col-sm-12 text-center mb-4">
             <h5 class="fw-semibold">RAW Photo</h5>
             <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}" class="img-fluid rounded"
-                style="max-height:60vh;" alt="RAW Photo">
+                style="max-height: 60vh;" alt="RAW Photo">
         </div>
 
         <!-- Tools grid in middle -->
         <div class="col-lg-6 col-md-8 col-sm-12">
-            <h1 class="page-title mb-2">Challenge {{ q_num }}</h1>
-            <p class="lead fst-italic mb-4">
-                Which 3 editing tools would we need to use?
-            </p>
+            <h1 class="page-title mb-2">Image {{ q_num }}</h1>
+            <p class="lead fst-italic mb-4">Which 3 editing tools would we need to use?</p>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tool in [
                 {'id':'shadows','label':'Shadows'},
@@ -54,18 +64,16 @@
         <div class="col-lg-3 col-md-12 text-center mb-4">
             <h5 class="fw-semibold">Edited Photo</h5>
             <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
-                class="img-fluid rounded" style="max-height:60vh;" alt="Edited Photo">
+                class="img-fluid rounded" style="max-height: 60vh;" alt="Edited Photo">
         </div>
-
     </div>
 
-    <!-- Check / Next controls -->
+    <!-- Controls: Check / Try Again / Next -->
     <div class="text-center mt-4">
-        <button id="check-btn" class="btn btn-primary me-3" disabled>
-            Check Response
-        </button>
+        <button id="check-btn" class="btn btn-primary me-2" disabled>Check Response</button>
+        <button id="try-again-btn" class="btn btn-secondary me-2" style="display:none;">Try Again</button>
         <a id="next-btn"
-            href="{% if q_num<3 %}{{ url_for('quiz_interactive',q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
+            href="{% if q_num < 3 %}{{ url_for('quiz_interactive', q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
             class="btn start-btn" style="display:none;">
             Next
         </a>
@@ -75,24 +83,32 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const qNum = {{ q_num }};
-    const correctTools = {{ correct_tools| tojson }};
-    const maxSelect = correctTools.length;
+    const correct = {{ correct_tools | tojson }};
+    const maxSelect = correct.length;
     const codeMap = {
-        black_point: "blk", brilliance: "bri",
-        exposure: "exp", highlights: "hl",
-        saturation: "sat", brightness: "bright"
+        black_point: "blk",
+        brilliance: "bri",
+        exposure: "exp",
+        highlights: "hl",
+        saturation: "sat",
+        brightness: "bright"
     };
     const comboBase = "{{ url_for('static', filename='img/icons/combos') }}/";
 
     const checkBtn = document.getElementById("check-btn");
+    const tryBtn = document.getElementById("try-again-btn");
     const nextBtn = document.getElementById("next-btn");
     const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
     const rawImgEl = document.getElementById("raw-img");
 
+    // Enable "Check Response" only when exactly maxSelect are ticked
     inputs.forEach(i =>
         i.addEventListener("change", () => {
             const cnt = inputs.filter(x => x.checked).length;
-            if (cnt > maxSelect) { i.checked = false; return; }
+            if (cnt > maxSelect) {
+                i.checked = false;
+                return;
+            }
             checkBtn.disabled = (cnt !== maxSelect);
         })
     );
@@ -100,35 +116,50 @@
     checkBtn.addEventListener("click", () => {
         let correctCount = 0;
         const selected = inputs.filter(i => i.checked).map(i => i.value);
+
+        // color each icon-circle based on correctness
         selected.forEach(tool => {
-            const fb = document.querySelector(`#tool-${tool} + label .feedback-icon`);
-            if (correctTools.includes(tool)) {
-                correctCount++; fb.classList.add("check"); fb.textContent = "✓";
+            const circle = document.querySelector(`#tool-${tool} + label .icon-circle`);
+            if (correct.includes(tool)) {
+                correctCount++;
+                circle.classList.add("bg-correct");
             } else {
-                fb.classList.add("wrong"); fb.textContent = "✕";
+                circle.classList.add("bg-wrong");
             }
         });
 
-        // show intermediate combination
-        rawImgEl.src = comboBase + "q" + qNum + "-" + selected.map(t => codeMap[t] || t).join("-") + ".jpg";
+        // show intermediate combo
+        rawImgEl.src = comboBase
+            + "q" + qNum + "-"
+            + selected.map(t => codeMap[t] || t).join("-")
+            + ".jpg";
 
         if (correctCount === maxSelect) {
-            // final combo
+            // perfect → final preview + Next
             rawImgEl.src = comboBase + "edited" + qNum + ".jpg";
             inputs.forEach(i => i.disabled = true);
-            checkBtn.disabled = true;
+            checkBtn.style.display = "none";
+            tryBtn.style.display = "none";
             nextBtn.style.display = "inline-block";
         } else {
-            setTimeout(() => {
-                rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
-                inputs.forEach(i => {
-                    i.checked = false; i.disabled = false;
-                    const fb = document.querySelector(`#tool-${i.value} + label .feedback-icon`);
-                    fb.classList.remove("check", "wrong"); fb.textContent = "";
-                });
-                checkBtn.disabled = true;
-            }, 800);
+            // wrong → show Try Again
+            checkBtn.style.display = "none";
+            tryBtn.style.display = "inline-block";
         }
+    });
+
+    tryBtn.addEventListener("click", () => {
+        // reset everything for another try
+        inputs.forEach(i => {
+            i.checked = false;
+            i.disabled = false;
+            const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
+            circle.classList.remove("bg-correct", "bg-wrong");
+        });
+        rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
+        checkBtn.disabled = true;
+        tryBtn.style.display = "none";
+        checkBtn.style.display = "inline-block";
     });
 });
 </script>
