@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask, jsonify, render_template, request, redirect, url_for
+from markupsafe import Markup
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here' 
@@ -28,64 +29,66 @@ LESSONS = {
     1: {
         "title": "Smart Exposure",
         "left_label": "Exposure",
-        "left_explanation": "Raises or lowers overall light levels across the whole photo; first stop when everything looks too dark or blown‑out.",
+        "left_explanation": Markup("<strong>Raises</strong> or <strong>lowers</strong> overall <strong>light levels</strong> across the whole photo; first stop when everything looks too dark or blown‑out."),
         "left_video": "exposure.gif",
         "right_label": "Brilliance",
-        "right_explanation": "Smartly lifts shadow detail and tones down highlights simultaneously, adding subtle \"HDR\" pop without flattening contrast. Adjusts a photo to make it look richer and more vibrant, brightening dark areas, pulling in highlights, and adding contrast to reveal hidden detail.",
+        "right_explanation": Markup("Smartly <strong>lifts shadow detail</strong> and <strong>tones down highlights</strong> simultaneously, adding subtle \"HDR\" pop without flattening contrast. "
+                                    "Adjusts a photo to make it look <strong>richer</strong> and more <strong>vibrant</strong>, brightening dark areas, pulling in highlights, and <strong>adding contrast</strong> to reveal hidden detail."),
         "right_video": "brilliance.gif"
     },
     2: {
         "title": "Dynamic Range Rescue",
         "left_label": "Highlights",
-        "left_explanation": "Recovers detail in bright areas (e.g., blown‑out skies) without touching mid‑tones; unique for salvaging over‑bright whites. Increasing highlights makes brighter areas brighter. Decreasing highlights makes brighter areas darker.",
+        "left_explanation": Markup("<strong>Recovers detail in bright areas</strong> (e.g., blown‑out skies) without touching mid‑tones; unique for salvaging over‑bright whites. <strong>Increasing</strong> highlights makes <strong>brighter areas brighter</strong>. <strong>Decreasing</strong> highlights makes <strong>brighter areas darker</strong>."),
         "left_video": "highlights.gif",
         "right_label": "Shadows",
-        "right_explanation": "Brightens the darkest regions while preserving bright parts; great for back‑lit subjects hidden in shade. Increasing shadows makes darker areas brighter. Decreasing shadows makes darker areas darker.",
+        "right_explanation": Markup("<strong>Brightens the darkest regions</strong> while <strong>preserving bright parts</strong>; great for back‑lit subjects hidden in shade. <strong>Increasing</strong> shadows makes <strong>darker areas brighter</strong>. <strong>Decreasing</strong> shadows makes <strong>darker areas darker</strong>."),
         "right_video": "shawdows.gif"
     },
     3: {
         "title": "Mid‑Tone Control",
         "left_label": "Brightness",
-        "left_explanation": "Adjusts mid‑tones only, letting you lighten an image without clipping highlights.",
+        "left_explanation": Markup("<strong>Adjusts mid‑tones</strong> only, letting you lighten an image without clipping highlights."),
         "left_video": "brightness.gif",
         "right_label": "Contrast",
-        "right_explanation": "Widens or narrows the gap between lights and darks for extra punch or a flatter look.",
+        "right_explanation": Markup("<strong>Widens</strong> or <strong>narrows</strong> the <strong>gap between lights</strong> and <strong>darks</strong> for extra punch or a flatter look."),
         "right_video": "contrast.gif"
     },
     4: {
         "title": "Deep‑Tone Finish",
         "left_label": "Black Point",
-        "left_explanation": "Deepens true blacks to add richness and depth, great for hazy shots.",
+        "left_explanation": Markup("<strong>Deepens true blacks</strong> to add <strong>richness</strong> and <strong>depth</strong>, great for hazy shots."),
         "left_video": "black-point.gif",
         "right_label": "Vignette",
-        "right_explanation": "Darkens (or lightens) edges to draw attention toward the center of the frame.",
+        "right_explanation": Markup("<strong>Darkens</strong> (or <strong>lightens</strong>) <strong>edges</strong> to draw attention toward the center of the frame."),
         "right_video": "vignette.gif"
     },
     5: {
         "title": "White‑Balance Fix",
         "left_label": "Warmth",
-        "left_explanation": "Shifts the whole image toward blue or orange to correct lighting color casts. Warmth adjusts the color tone of your photo by adding or removing orange and blue tints. Increasing warmth adds more orange, making the photo look sunnier and cozier. Decreasing it adds more blue, giving the photo a cooler, more muted look.",
+        "left_explanation": Markup("<strong>Shifts</strong> the whole <strong>image toward blue or orange</strong> to correct lighting color casts. Warmth <strong>adjusts</strong> the <strong>color tone</strong> of your photo by adding or removing orange and blue tints. <strong>Increasing warmth</strong> adds <strong>more orange</strong>, making the photo look sunnier and cozier. <strong>Decreasing</strong> it adds <strong>more blue</strong>, giving the photo a cooler, more muted look."),
         "left_video": "warmth.gif",
         "right_label": "Tint",
-        "right_explanation": "Fine‑tunes green ↔ magenta balance, perfect for fluorescent‑light fixes.",
+        "right_explanation": Markup("<strong>Fine‑tunes green ↔ magenta balance</strong>, perfect for fluorescent‑light fixes."),
         "right_video": "tint.gif"
     },
     6: {
         "title": "Color Enhancement",
         "left_label": "Saturation",
-        "left_explanation": "Saturation controls how intense or rich the colors in your photo appear. Increasing saturation makes the colors look brighter, bolder, and more vibrant. Decreasing it makes the colors look faded, softer, or more neutral. Turning it all the way down can even make the photo look black and white.",
+        "left_explanation": Markup("Saturation <strong>controls</strong> how <strong>intense</strong> or <strong>rich the colors</strong> in your photo <strong>appear</strong>. <strong>Increasing</strong> saturation makes the <strong>colors look brighter</strong>, bolder, and more vibrant. "
+                            "<strong>Decreasing</strong> it makes the <strong>colors look faded, softer, or more neutral</strong>. Turning it all the way down can even make the photo look black and white."),
         "left_video": "saturation.gif",
         "right_label": "Vibrance",
-        "right_explanation": "Similar to saturation but more subtle with skin tones, enhancing less saturated colors while preserving already vibrant ones.",
+        "right_explanation": Markup("Similar to saturation but more subtle with <strong>skin tones</strong>, <strong>enhancing less saturated colors</strong> while preserving already vibrant ones."),
         "right_video": "vibrance.gif"
     },
     7: {
         "title": "Texture Tweaks",
         "left_label": "Sharpness",
-        "left_explanation": "Accentuates edges for crisper detail; best checked at 100% to avoid halos.",
+        "left_explanation": Markup("<strong>Accentuates edges</strong> for crisper <strong>detail</strong>; best checked at 100% to avoid halos."),
         "left_video": "sharpness.gif",
         "right_label": "Definition",
-        "right_explanation": "Mid‑frequency clarity that adds texture and micro‑contrast (similar to \"Clarity\" in Lightroom).",
+        "right_explanation": Markup("Mid‑frequency <strong>clarity</strong> that <strong>adds texture</strong> and <strong>micro‑contrast</strong> (similar to \"Clarity\" in Lightroom)."),
         "right_video": "definition.gif"
     },
     # Practice content
