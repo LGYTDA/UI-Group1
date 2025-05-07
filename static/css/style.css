@@ -72,6 +72,7 @@
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
+
 .lessonpage-title {
     color: #ff822b;
     font-size: 2.3rem;
@@ -203,6 +204,7 @@
     flex-direction: column;
     justify-content: flex-end;
 }
+
 .example-video {
     max-height: 60vh;
 }
@@ -210,6 +212,7 @@
 .navigation {
     flex-shrink: 0;
 }
+
 .video-height-container {
     height: auto;
     margin-bottom: 0rem;
@@ -311,6 +314,7 @@
 .feedback-icon.wrong {
     color: #dc3545;
 }
+
 .lessonpage-subtitle {
     color: #6d6242;
     font-size: 1.3rem;
@@ -341,7 +345,8 @@
     background-size: 16px 12px;
 }
 
-#jumpToLesson:hover, #jumpToLesson:focus {
+#jumpToLesson:hover,
+#jumpToLesson:focus {
     border-color: #a59763;
     outline: none;
     box-shadow: 0 0 0 0.25rem rgba(179, 162, 117, 0.25);
@@ -401,57 +406,238 @@ label[for="jumpToLesson"] {
 
 /*lesson progress bar*/
 .progress-container {
-  width: 100%;
-  margin: 1rem auto 2rem;
-  text-align: center;
+    width: 100%;
+    margin: 1rem auto 2rem;
+    text-align: center;
 }
 
 .progress-bar-wrapper {
-  height: 12px;
-  background-color: #e9e2d0;
-  border-radius: 6px;
-  overflow: hidden;
-  width: 80%;
-  margin: 0 auto;
-  border: 1px solid #a59763;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 12px;
+    background-color: #e9e2d0;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #a59763;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar {
-  height: 100%;
-  background: linear-gradient(to right, #ff822b, #ffb13d);
-  border-radius: 6px;
-  transition: width 0.5s ease;
-  position: relative;
-  box-shadow: 0 1px 2px rgba(255, 130, 43, 0.3);
+    height: 100%;
+    background: linear-gradient(to right, #ff822b, #ffb13d);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(255, 130, 43, 0.3);
 }
 
 .progress-text {
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  color: #6d6242;
-  font-weight: 500;
-  font-family: 'Orbitron', sans-serif;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #6d6242;
+    font-weight: 500;
+    font-family: 'Orbitron', sans-serif;
 
 }
 
 .progress-bar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  animation: shine 2s infinite;
-  z-index: 1;
-  pointer-events: none; /* lets clicks pass through */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent);
+    animation: shine 2s infinite;
+    z-index: 1;
+    pointer-events: none;
+    /* lets clicks pass through */
 }
 
+.menu-bar {
+    background-color: #e0e0e0;
+    padding: .75rem 0;
+    margin: -1.5rem -1.5rem 2rem;
+}
 
+.menu-bar .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+    margin-right: 2rem;
+}
 
+.menu-bar .nav-link {
+    color: #777;
+    margin-right: 1.5rem;
+    font-size: 1.1rem;
+    transition: color .2s;
+}
+
+.menu-bar .nav-link.active {
+    color: #000;
+    font-weight: bold;
+}
+
+.menu-bar .nav-link:hover {
+    color: #333;
+}
+
+/* quiz intro background */
+.quiz-intro {
+    background-color: #FFF9DB;
+}
+
+/* title & subhead */
+.quiz-title {
+    font-size: 3rem;
+    font-weight: 300;
+}
+
+.quiz-subhead {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #555;
+}
+
+/* icon grid */
+.icons-grid .icon-wrapper {
+    width: 100px;
+}
+
+.icons-grid .icon-circle {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #bbb;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+
+.icons-grid .icon-wrapper:hover .icon-circle {
+    border-color: #ff822b;
+    box-shadow: 0 0 8px rgba(255, 130, 43, 0.4);
+    transform: scale(1.1);
+}
+
+.icon-label {
+    margin-top: .25rem;
+    font-weight: 500;
+}
+
+/* reuse your existing .start-btn styling */
+.start-btn {
+    font-size: 1.5rem;
+    padding: .75rem 2.5rem;
+}
+
+body.quiz-intro-page {
+    background-color: #FFF9DB;
+}
+
+.quiz-intro {
+    background-color: #FFF9DB;
+}
+
+.quiz-title {
+    font-size: 3rem;
+    font-weight: 300;
+}
+
+.quiz-subhead {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #555;
+}
+
+.icons-grid .icon-wrapper {
+    width: 100px;
+}
+
+.icons-grid .icon-circle {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #bbb;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+
+.icons-grid .icon-wrapper:hover .icon-circle {
+    border-color: #ff822b;
+    box-shadow: 0 0 8px rgba(255, 130, 43, 0.4);
+    transform: scale(1.1);
+}
+
+.icon-label {
+    margin-top: .25rem;
+    font-weight: 500;
+}
+
+.start-btn {
+    font-size: 1.5rem;
+    padding: .75rem 2.5rem;
+}
+
+/* ── global page background ───────────────────────────────────────── */
+body {
+    background-color: rgb(254, 248, 217);
+}
+
+/* ── full-width, taller & padded navbar ───────────────────────────── */
+.menu-bar {
+    background-color: #e0e0e0;
+    padding-top: 2.5rem;
+    /* more breathing room above */
+    padding-bottom: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* ← changed from space-between */
+}
+
+.menu-bar .brand {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #000;
+    /* vertically centered by align-items */
+}
+
+.menu-bar .nav {
+    display: flex;
+    gap: 2rem;
+    /* space between links */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-left: 3rem;
+    /* pushes the links a bit away from the brand */
+}
+
+.menu-bar .nav-link {
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.75rem 1rem;
+    color: #555;
+    transition: color .2s, background-color .2s;
+}
+
+.menu-bar .nav-link:hover {
+    color: #333;
+}
+
+.menu-bar .nav-link.active {
+    color: #000;
+    font-weight: bold;
+    background-color: #ff822b;
+    border-radius: .25rem;
+}

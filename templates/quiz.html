@@ -1,141 +1,66 @@
 {% extends "index.html" %}
 {% block content %}
 
-<!-- Menu Bar -->
-<nav class="menu-bar mb-4">
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
-        </li>
-    </ul>
-</nav>
+<div class="quiz-intro bg-lightyellow text-center p-5 rounded">
 
-<div class="row align-items-start mb-5">
-    <!-- Left Column -->
-    <div class="col-md-6">
-        <h1 class="page-title">Quiz: Combining our Tools</h1>
-        <ul class="home-list">
-            <li>You will be given a raw (unedited) photo, and a final edited image.</li>
-            <li>You’re going to find which 3 of the 14 editing tools were used to enhance the image.</li>
-            <li>You get a score out of 9, with each correct tool scored as 1 point.</li>
-        </ul>
-    </div>
+    <!-- Title + Subhead -->
+    <h1 class="quiz-title mb-3">Quiz: Combining Tools</h1>
+    <p class="quiz-subhead mb-5">
+        You will be given a raw (unedited) photo, and a final edited image.<br>
+        You’re going to find what 3 of the 14 editing tools were used to enhance the image.
+    </p>
 
-    <!-- Right Column: Icons Grid -->
-    <div class="col-md-6">
-        <!-- Row 1: four tools, evenly spaced -->
-        <div class="row mb-4 justify-content-around">
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/shadows.png') }}" alt="Shadows">
+    <!-- Icons Grid -->
+    <div class="icons-grid mb-5">
+        <!-- Row 1 -->
+        <div class="d-flex justify-content-center mb-4">
+            {% for tool in ['shadows','highlights','brilliance','exposure'] %}
+            <div class="icon-wrapper mx-3 text-center">
+                <div class="icon-circle mb-2">
+                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
                 </div>
-                <div class="icon-label">Shadows</div>
+                <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/highlights.png') }}" alt="Highlights">
-                </div>
-                <div class="icon-label">Highlights</div>
-            </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/brilliance.png') }}" alt="Brilliance">
-                </div>
-                <div class="icon-label">Brilliance</div>
-            </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/exposure.png') }}" alt="Exposure">
-                </div>
-                <div class="icon-label">Exposure</div>
-            </div>
+            {% endfor %}
         </div>
-
-        <!-- Row 2: five tools, fixed columns -->
-        <div class="row mb-4">
-            <div class="col-2 offset-1 text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/vignette.png') }}" alt="Vignette">
+        <!-- Row 2 -->
+        <div class="d-flex justify-content-center mb-4">
+            {% for tool in ['vignette','contrast','sharpness','brightness','definition'] %}
+            <div class="icon-wrapper mx-3 text-center">
+                <div class="icon-circle mb-2">
+                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
                 </div>
-                <div class="icon-label">Vignette</div>
+                <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
-            <div class="col-2 text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/contrast.png') }}" alt="Contrast">
-                </div>
-                <div class="icon-label">Contrast</div>
-            </div>
-            <div class="col-2 text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/sharpness.png') }}" alt="Sharpness">
-                </div>
-                <div class="icon-label">Sharpness</div>
-            </div>
-            <div class="col-2 text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/brightness.png') }}" alt="Brightness">
-                </div>
-                <div class="icon-label">Brightness</div>
-            </div>
-            <div class="col-2 text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/definition.png') }}" alt="Definition">
-                </div>
-                <div class="icon-label">Definition</div>
-            </div>
+            {% endfor %}
         </div>
-
-        <!-- Row 3: four tools, evenly spaced -->
-        <div class="row mb-4 justify-content-around">
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/tint.png') }}" alt="Tint">
+        <!-- Row 3 -->
+        <div class="d-flex justify-content-center mb-4">
+            {% for tool in ['tint','saturation','vibrance','warmth'] %}
+            <div class="icon-wrapper mx-3 text-center">
+                <div class="icon-circle mb-2">
+                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
                 </div>
-                <div class="icon-label">Tint</div>
+                <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/saturation.png') }}" alt="Saturation">
-                </div>
-                <div class="icon-label">Saturation</div>
-            </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/vibrance.png') }}" alt="Vibrance">
-                </div>
-                <div class="icon-label">Vibrance</div>
-            </div>
-            <div class="col-auto text-center">
-                <div class="icon-circle mb-1">
-                    <img src="{{ url_for('static', filename='img/icons/warmth.png') }}" alt="Warmth">
-                </div>
-                <div class="icon-label">Warmth</div>
-            </div>
+            {% endfor %}
         </div>
-
-        <!-- Row 4: centered Black Point -->
-        <div class="row">
-            <div class="col-4 offset-4 text-center">
-                <div class="icon-circle mb-1">
+        <!-- Row 4: Black Point centered -->
+        <div class="d-flex justify-content-center">
+            <div class="icon-wrapper text-center">
+                <div class="icon-circle mb-2">
                     <img src="{{ url_for('static', filename='img/icons/black_point.png') }}" alt="Black Point">
                 </div>
                 <div class="icon-label">Black Point</div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Start Quiz button -->
-<div class="text-center">
-    <a href="{{ url_for('quiz_interactive', q_num=1) }}" class="btn start-btn">
+    <!-- Start Quiz button -->
+    <a href="{{ url_for('quiz_interactive', q_num=1) }}" class="btn start-btn btn-lg">
         Start Quiz
     </a>
+
 </div>
 
 {% endblock %}

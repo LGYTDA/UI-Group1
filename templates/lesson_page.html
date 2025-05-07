@@ -1,100 +1,88 @@
 {% extends "index.html" %}
-
 {% block content %}
+<!-- Orbitron font for headings -->
 <link href="https://fonts.cdnfonts.com/css/orbitron-2" rel="stylesheet">
+<!-- Pass interactive controls to JS if needed -->
 <script>
     var interactiveControls = {{ interactive_controls | tojson }};
 </script>
 
-<nav class="menu-bar mb-4">
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Lesson</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
-        </li>
-    </ul>
-</nav>
 <div class="lesson-page vh-100" style="background-color: #FFF9DB;">
+    <!-- Page title -->
     <h1 class="lessonpage-title">{{ lesson['title'] }}</h1>
+
+    <!-- Progress bar -->
     <div class="progress-container">
         <div class="progress-bar-wrapper">
             <div class="progress-bar" style="width: {{ (page_num / total_pages) * 100 }}%"></div>
         </div>
         <div class="progress-text">Lesson {{ page_num }} of {{ total_pages }}</div>
     </div>
+
     {% if not lesson.get('is_practice', False) %}
+    <!-- Standard lesson view -->
     <div class="lessonpage-subtitle">Follow along with the recording on your iPhone!</div>
     <div class="container flex-column">
-
         <div class="row video-height-container">
-            <!-- First column - Left video -->
+            <!-- Left video -->
             <div class="col-md-3 justify-content-center">
                 <div class="example-video w-100">
-                    <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['left_video']) }}" class="example-video w-100" alt="Example GIF">
+                    <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['left_video']) }}"
+                        class="example-video w-100" alt="{{ lesson['left_label'] }} demo">
                 </div>
             </div>
-
-            <!-- Second column - Left video explanation -->
+            <!-- Left explanation -->
             <div class="col-md-3">
                 <div class="home-list align-self-start mt-0">
                     <h4>{{ lesson['left_label'] }}</h4>
                     <p>{{ lesson['left_explanation'] }}</p>
                 </div>
             </div>
-
-            <!-- Third column - Right video explanation -->
+            <!-- Right explanation -->
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <div class="home-list mb-0">
                     <h4>{{ lesson['right_label'] }}</h4>
                     <p>{{ lesson['right_explanation'] }}</p>
                 </div>
             </div>
-
-            <!-- Fourth column - Right video -->
-            <div class="col-md-3  justify-content-center">
-                <div class="image-container h-100 d-flex align-items-center">
-                    <div class="example-video w-100">
-                        <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['right_video']) }}" class="example-video w-100" alt="Example GIF">
-                    </div>
+            <!-- Right video -->
+            <div class="col-md-3 justify-content-center">
+                <div class="example-video w-100">
+                    <img src="{{ url_for('static', filename='img/Lesson-Videos/' + lesson['right_video']) }}"
+                        class="example-video w-100" alt="{{ lesson['right_label'] }} demo">
                 </div>
             </div>
         </div>
     </div>
     {% else %}
+    <!-- Practice view -->
     <div class="container">
         <div class="row">
-            <!-- Left column - Left tool explanation -->
+            <!-- Left explanation -->
             <div class="col-md-3">
                 <div class="home-list mt-3">
                     <h4>{{ lesson['left_label'] }}</h4>
                     <p>{{ lesson['left_explanation'] }}</p>
                 </div>
             </div>
-
-            <!-- Middle column - Interactive image and sliders -->
+            <!-- Interactive controls + canvas -->
             <div class="col-md-6">
                 <h4 class="text-center">Try It Yourself!</h4>
                 <div class="row mt-4 justify-content-center">
                     {% for control in interactive_controls %}
                     <div class="col-md-6 mb-3">
-                        <label for="{{ control }}Range" class="form-label">{{ control }}</label>
+                        <label for="{{ control }}Range" class="form-label">{{ control|capitalize }}</label>
                         <input type="range" class="form-range" min="0" max="100" id="{{ control }}Range">
                         <p class="text-center" id="{{ control }}-value">0</p>
                     </div>
                     {% endfor %}
                 </div>
-
                 <div class="text-center mt-3">
-                    <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                    <img id="editCanvas" src="{{ url_for('static', filename='img/canvas.png') }}" alt="Interactive Edit"
+                        class="img-fluid rounded" style="max-width:100%;height:auto;">
                 </div>
             </div>
-
-            <!-- Right column - Right tool explanation -->
+            <!-- Right explanation -->
             <div class="col-md-3">
                 <div class="home-list mt-3">
                     <h4>{{ lesson['right_label'] }}</h4>
@@ -105,27 +93,25 @@
     </div>
     {% endif %}
 
+    <!-- Lesson navigation -->
     <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap lesson-navigation">
-        <!-- Jump to Dropdown (centered horizontally within available space) -->
         <div class="flex-grow-1 text-center">
             <label for="jumpToLesson" class="me-2">Jump to:</label>
             <select id="jumpToLesson" class="themed-select" onchange="location = this.value;">
                 {% for i in range(1, total_pages+1) %}
-                <option value="{{ url_for('lesson_page', page_num=i) }}" {% if i == page_num %}selected{% endif %}>
+                <option value="{{ url_for('lesson_page', page_num=i) }}" {% if i==page_num %}selected{% endif %}>
                     {{ lessons[i]['title'] }}
                 </option>
                 {% endfor %}
             </select>
         </div>
-
-        <!-- Navigation Buttons (aligned right) -->
         <div>
             {% if page_num > 1 %}
             <a href="{{ url_for('lesson_page', page_num=page_num-1) }}" class="btn btn-primary me-2">Previous</a>
             {% endif %}
-            {% if page_num < total_pages %}
-            <a href="{{ url_for('lesson_page', page_num=page_num+1) }}" class="btn btn-primary">Next</a>
-            {% endif %}
+            {% if page_num < total_pages %} <a href="{{ url_for('lesson_page', page_num=page_num+1) }}"
+                class="btn btn-primary">Next</a>
+                {% endif %}
         </div>
     </div>
 
@@ -136,12 +122,5 @@
         </a>
     </div>
     {% endif %}
-
-
-
-
-
 </div>
-
-
 {% endblock %}
