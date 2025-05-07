@@ -1,3 +1,4 @@
+{# templates/quiz.html #}
 {% extends "index.html" %}
 {% block content %}
 
@@ -12,40 +13,47 @@
 
     <!-- Icons Grid -->
     <div class="icons-grid mb-5">
-        <!-- Row 1 -->
+
+        <!-- Row 1: centered -->
         <div class="d-flex justify-content-center mb-4">
             {% for tool in ['shadows','highlights','brilliance','exposure'] %}
             <div class="icon-wrapper mx-3 text-center">
                 <div class="icon-circle mb-2">
-                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
+                    <img src="{{ url_for('static', filename='img/icons/' ~ tool ~ '.png') }}"
+                        alt="{{ tool|capitalize }}">
                 </div>
                 <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
             {% endfor %}
         </div>
-        <!-- Row 2 -->
-        <div class="d-flex justify-content-center mb-4">
+
+        <!-- Row 2: shifted left -->
+        <div class="d-flex justify-content-start mb-4" style="margin-left:-2rem;">
             {% for tool in ['vignette','contrast','sharpness','brightness','definition'] %}
             <div class="icon-wrapper mx-3 text-center">
                 <div class="icon-circle mb-2">
-                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
+                    <img src="{{ url_for('static', filename='img/icons/' ~ tool ~ '.png') }}"
+                        alt="{{ tool|capitalize }}">
                 </div>
                 <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
             {% endfor %}
         </div>
-        <!-- Row 3 -->
+
+        <!-- Row 3: centered -->
         <div class="d-flex justify-content-center mb-4">
             {% for tool in ['tint','saturation','vibrance','warmth'] %}
             <div class="icon-wrapper mx-3 text-center">
                 <div class="icon-circle mb-2">
-                    <img src="{{ url_for('static', filename='img/icons/'~tool~'.png') }}" alt="{{ tool|capitalize }}">
+                    <img src="{{ url_for('static', filename='img/icons/' ~ tool ~ '.png') }}"
+                        alt="{{ tool|capitalize }}">
                 </div>
                 <div class="icon-label">{{ tool|capitalize }}</div>
             </div>
             {% endfor %}
         </div>
-        <!-- Row 4: Black Point centered -->
+
+        <!-- Row 4: single, centered -->
         <div class="d-flex justify-content-center">
             <div class="icon-wrapper text-center">
                 <div class="icon-circle mb-2">
@@ -54,6 +62,7 @@
                 <div class="icon-label">Black Point</div>
             </div>
         </div>
+
     </div>
 
     <!-- Start Quiz button -->
