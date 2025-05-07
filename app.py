@@ -23,10 +23,10 @@ QUIZ = [
     {"raw_img": "raw3.jpg", "correct": ["brightness", "black_point", "highlights"]},
 ]
 
-INTERACTIVE_CORRECT = {
-    1: ["exposure", "brilliance", "shadows"],
-    2: ["highlights", "saturation", "brilliance"],
-    3: ["black_point", "brightness", "highlights"],
+CORRECT_TOOLS = {
+    1: ["black_point","brilliance","exposure"],
+    2: ["brilliance","highlights","saturation"],
+    3: ["brightness","highlights","black_point"]
 }
 
 # Lesson content
@@ -168,39 +168,48 @@ def quiz_page(q_num=1):
     return render_template("quiz.html", q_num=q_num)
 
 
-@app.route("/quiz_interactive/<int:q_num>")
+@app.route('/quiz_interactive/<int:q_num>')
 def quiz_interactive(q_num):
-    if not 1 <= q_num <= len(QUIZ):
-        return redirect(url_for("quiz_result"))
+    raw_img = f"raw{q_num}.jpg"
+    correct_tools = CORRECT_TOOLS[q_num]
+    return render_template('quiz_interactive.html',
+                           q_num=q_num,
+                           raw_img=raw_img,
+                           correct_tools=correct_tools)
 
-    entry = QUIZ[q_num - 1]
-    return render_template(
-        "quiz_interactive.html",
-        q_num=q_num,
-        raw_img=entry["raw_img"],
-        correct_tools=entry["correct"],
-    )
-
-
-@app.route("/submit_interactive", methods=["POST"])
+@app.route('/submit_interactive', methods=['POST'])
 def submit_interactive():
     data = request.get_json()
-    q_num = data.get("q_num")
-    selected = data.get("selected", [])
+    q_num = data.get('q_num')
+    selected = data.get('selected', [])
 
-    # safe lookup
-    correct = INTERACTIVE_CORRECT.get(q_num, [])
+    # compute how many of the selected are correct
+    correct_list = CORRECT_TOOLS.get(q_num, [])
+    correct_count = sum(1 for t in selected if t in correct_list)
 
-    # count correct and accumulate in session
-    correct_count = sum(1 for t in selected if t in correct)
-    session["total_correct_tools"] = session.get("total_correct_tools", 0) + correct_count
+    # initialize per‐question scoring dict if needed
+    if 'per_question_scores' not in session:
+        session['per_question_scores'] = {}
 
-    return jsonify({"correct_count": correct_count})
+    # keep the *highest* score seen so far for this question
+    prev_best = session['per_question_scores'].get(str(q_num), 0)
+    session['per_question_scores'][str(q_num)] = max(prev_best, correct_count)
 
-@app.route("/quiz_result")
+    # recompute the total across all questions
+    session['total_correct_tools'] = sum(session['per_question_scores'].values())
+
+    return jsonify({
+        'this_round': correct_count,
+        'total_correct': session['total_correct_tools']
+    })
+
+@app.route('/quiz_result')
 def quiz_result():
-    total = session.get("total_correct_tools", 0)
-    return render_template("quiz_result.html", score=total)
+    score = session.get('total_correct_tools', 0)
+    # reset for next time if you like:
+    # session.pop('per_question_scores', None)
+    # session.pop('total_correct_tools', None)
+    return render_template('quiz_result.html', score=score)
 
 
 @app.route("/lesson/<int:page_num>")

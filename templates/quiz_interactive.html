@@ -16,17 +16,19 @@
 
 <div class="container-fluid px-4">
     <div class="row align-items-start">
-        <!-- RAW photo on left -->
+        <!-- RAW photo -->
         <div class="col-lg-3 col-md-4 col-sm-12 text-center mb-4">
             <h5 class="fw-semibold">RAW Photo</h5>
             <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}" class="img-fluid rounded"
                 style="max-height: 60vh;" alt="RAW Photo">
         </div>
 
-        <!-- Tools grid in middle -->
+        <!-- Question & tool icons -->
         <div class="col-lg-6 col-md-8 col-sm-12">
             <h1 class="page-title mb-2">Image {{ q_num }}</h1>
-            <p class="lead fst-italic mb-4">Which 3 editing tools would we need to use?</p>
+            <p class="lead fst-italic mb-4">
+                Which 3 editing tools would we need to use?
+            </p>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tool in [
                 {'id':'shadows','label':'Shadows'},
@@ -50,7 +52,6 @@
                         <div class="icon-circle mb-1">
                             <img src="{{ url_for('static', filename='img/icons/' ~ tool.id ~ '.png') }}"
                                 alt="{{ tool.label }}">
-                            <span class="feedback-icon"></span>
                         </div>
                         <div class="icon-label">{{ tool.label }}</div>
                     </label>
@@ -59,7 +60,7 @@
             </div>
         </div>
 
-        <!-- Edited photo on right -->
+        <!-- EDITED photo -->
         <div class="col-lg-3 col-md-12 text-center mb-4">
             <h5 class="fw-semibold">Edited Photo</h5>
             <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
@@ -67,10 +68,14 @@
         </div>
     </div>
 
-    <!-- Controls: Check / Try Again / Next -->
+    <!-- Controls -->
     <div class="text-center mt-4">
-        <button id="check-btn" class="btn btn-primary me-2" disabled>Check Response</button>
-        <button id="try-again-btn" class="btn btn-secondary me-2" style="display:none;">Try Again</button>
+        <button id="check-btn" class="btn btn-primary me-2" disabled>
+            Check Response
+        </button>
+        <button id="try-again-btn" class="btn btn-secondary me-2" style="display:none;">
+            Try Again
+        </button>
         <a id="next-btn"
             href="{% if q_num < 3 %}{{ url_for('quiz_interactive', q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
             class="btn start-btn" style="display:none;">Next</a>
@@ -98,20 +103,18 @@
     const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
     const rawImgEl = document.getElementById("raw-img");
 
-    // enable Check when exactly maxSelect are checked
-    inputs.forEach(i =>
-        i.addEventListener("change", () => {
-            const cnt = inputs.filter(x => x.checked).length;
-            if (cnt > maxSelect) { i.checked = false; return; }
-            checkBtn.disabled = (cnt !== maxSelect);
-        })
-    );
+    // only enable “Check” when exactly maxSelect are checked
+    inputs.forEach(i => i.addEventListener("change", () => {
+        const cnt = inputs.filter(x => x.checked).length;
+        if (cnt > maxSelect) return i.checked = false;
+        checkBtn.disabled = (cnt !== maxSelect);
+    }));
 
     checkBtn.addEventListener("click", () => {
         let correctCount = 0;
         const selected = inputs.filter(i => i.checked).map(i => i.value);
 
-        // mark circles green/red and lock correct ones
+        // highlight circles and lock in correct ones
         selected.forEach(tool => {
             const circle = document.querySelector(`#tool-${tool} + label .icon-circle`);
             if (correct.includes(tool)) {
@@ -123,7 +126,7 @@
             }
         });
 
-        // update intermediate preview only if at least one is correct
+        // update raw‐photo preview only if some are correct
         if (correctCount > 0) {
             rawImgEl.src = comboBase
                 + "q" + qNum + "-"
@@ -131,22 +134,29 @@
                 + ".jpg";
         }
 
+        // POST your partial score up to the server
+        fetch("/submit_interactive", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ q_num: qNum, selected })
+        });
+
         if (correctCount === maxSelect) {
-            // all correct → final preview + Next
+            // perfect → show final preview + Next
             rawImgEl.src = comboBase + "edited" + qNum + ".jpg";
             inputs.forEach(i => i.disabled = true);
             checkBtn.style.display = "none";
             tryBtn.style.display = "none";
             nextBtn.style.display = "inline-block";
         } else {
-            // still missing → allow Try Again
+            // not done → allow another try
             checkBtn.style.display = "none";
             tryBtn.style.display = "inline-block";
         }
     });
 
     tryBtn.addEventListener("click", () => {
-        // clear only the wrong ones
+        // un‐check and re‐enable only the wrong ones
         inputs.forEach(i => {
             const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
             if (!correct.includes(i.value)) {
@@ -155,7 +165,6 @@
                 circle.classList.remove("bg-wrong");
             }
         });
-        // restore raw photo
         rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
         checkBtn.disabled = true;
         tryBtn.style.display = "none";
