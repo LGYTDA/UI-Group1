@@ -16,7 +16,14 @@
         <div class="progress-bar-wrapper">
             <div class="progress-bar" style="width: {{ (page_num / total_pages) * 100 }}%"></div>
         </div>
-        <div class="progress-text">Lesson {{ page_num }} of {{ total_pages }}</div>
+        <div class="progress-text">
+            {% if lesson.get('is_practice', False) %}
+            {% set practice_map = {8: 1, 9: 2, 10: 3, 11: 4, 12: 5, 13: 6} %}
+            Practice {{ practice_map[page_num] }} of 6
+            {% else %}
+            Lesson {{ page_num }} of 7
+            {% endif %}
+        </div>
     </div>
 
     {% if not lesson.get('is_practice', False) %}
@@ -100,7 +107,11 @@
             <select id="jumpToLesson" class="themed-select" onchange="location = this.value;">
                 {% for i in range(1, total_pages+1) %}
                 <option value="{{ url_for('lesson_page', page_num=i) }}" {% if i==page_num %}selected{% endif %}>
-                    {{ lessons[i]['title'] }}
+                    {% if lessons[i].get('is_practice', False) %}
+                    Practice {{ loop.index - 7 }}: {{ lessons[i]['title'] }}
+                    {% else %}
+                    Lesson {{ loop.index }}: {{ lessons[i]['title'] }}
+                    {% endif %}
                 </option>
                 {% endfor %}
             </select>
