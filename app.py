@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, session, jsonify, render_template, request, redirect, url_for
 from markupsafe import Markup
 
 app = Flask(__name__)
@@ -17,11 +17,16 @@ with open(os.path.join(BASE_DIR, "data", "quiz.json"), "r") as f:
 # Track non‑interactive answers
 answers = []
 
-# Map q_num → the three correct tool‐IDs
+QUIZ = [
+    {"raw_img": "raw1.jpg", "correct": ["brilliance", "exposure", "black_point"]},
+    {"raw_img": "raw2.jpg", "correct": ["highlights", "saturation", "brilliance"]},
+    {"raw_img": "raw3.jpg", "correct": ["brightness", "black_point", "highlights"]},
+]
+
 INTERACTIVE_CORRECT = {
-    1: ["exposure",  "brilliance",   "black_point"],
-    2: ["highlights","brilliance",   "saturation"],
-    3: ["highlights","black_point",  "brightness"]
+    1: ["exposure", "brilliance", "shadows"],
+    2: ["highlights", "saturation", "brilliance"],
+    3: ["black_point", "brightness", "highlights"],
 }
 
 # Lesson content
@@ -155,53 +160,48 @@ def home_page():
     answers.clear()
     return render_template("home.html", user=MY_NAME)
 
-@app.route("/quiz/<int:q_num>", methods=["GET", "POST"])
-def quiz_page(q_num):
-    total = len(QUIZ)
-    if q_num > total:
-        return redirect(url_for("quiz_result"))
-
-    question = QUIZ.get(str(q_num))
-    if not question:
-        return redirect(url_for("quiz_result"))
-
-    if request.method == "POST":
-        selected = request.form.get("choice")
-        answers.append({"q": q_num, "choice": selected})
-        return redirect(url_for("quiz_page", q_num=q_num + 1))
-
-    return render_template(
-        "quiz.html",
-        question_num=q_num,
-        total=total,
-        question=question
-    )
+@app.route("/quiz")
+@app.route("/quiz/<int:q_num>")
+def quiz_page(q_num=1):
+    # reset total on quiz start
+    session["total_correct_tools"] = 0
+    return render_template("quiz.html", q_num=q_num)
 
 
 @app.route("/quiz_interactive/<int:q_num>")
 def quiz_interactive(q_num):
-    # make sure it’s a valid question
-    if q_num not in INTERACTIVE_CORRECT:
+    if not 1 <= q_num <= len(QUIZ):
         return redirect(url_for("quiz_result"))
 
-    raw_img      = f"raw{q_num}.jpg"
-    correct_tools = INTERACTIVE_CORRECT[q_num]
-
+    entry = QUIZ[q_num - 1]
     return render_template(
         "quiz_interactive.html",
         q_num=q_num,
-        raw_img=raw_img,
-        correct_tools=correct_tools
+        raw_img=entry["raw_img"],
+        correct_tools=entry["correct"],
     )
+
+
+@app.route("/submit_interactive", methods=["POST"])
+def submit_interactive():
+    data = request.get_json()
+    q_num = data.get("q_num")
+    selected = data.get("selected", [])
+
+    # safe lookup
+    correct = INTERACTIVE_CORRECT.get(q_num, [])
+
+    # count correct and accumulate in session
+    correct_count = sum(1 for t in selected if t in correct)
+    session["total_correct_tools"] = session.get("total_correct_tools", 0) + correct_count
+
+    return jsonify({"correct_count": correct_count})
 
 @app.route("/quiz_result")
 def quiz_result():
-    correct = sum(
-        1 for entry in answers
-        if entry["choice"] == QUIZ[str(entry["q"])]["correct"]
-    )
-    score = f"{correct}/{len(QUIZ)}"
-    return render_template("result.html", score=score)
+    total = session.get("total_correct_tools", 0)
+    return render_template("quiz_result.html", score=total)
+
 
 @app.route("/lesson/<int:page_num>")
 def lesson_page(page_num):

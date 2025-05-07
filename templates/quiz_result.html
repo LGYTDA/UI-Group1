@@ -1,0 +1,73 @@
+{# templates/quiz_result.html #}
+{% extends "index.html" %}
+{% block content %}
+<link href="https://fonts.cdnfonts.com/css/orbitron-2" rel="stylesheet">
+
+<style>
+    /* full‐page container */
+    .quiz-result-page {
+        background-color: #FFF9DB;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    /* Headings */
+    .congrats-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .subheading {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2rem;
+        color: #ff822b;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Score text */
+    .score-text {
+        font-style: italic;
+        color: #6d6242;
+        font-size: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    /* Buttons */
+    .result-buttons .btn {
+        background-color: #e0e0e0;
+        color: #000;
+        border: 3px solid #000;
+        border-radius: 1rem;
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        margin: 0 1rem;
+        min-width: 12rem;
+        transition: background-color .2s;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+    }
+
+    .result-buttons .btn:hover {
+        background-color: #ccc;
+        text-decoration: none;
+    }
+</style>
+
+<div class="quiz-result-page">
+    <h1 class="congrats-title">Congratulations!</h1>
+    <h2 class="subheading">You completed the quiz!</h2>
+    <p class="score-text">
+        You scored <strong>{{ score }}</strong> out of 9!
+    </p>
+    <div class="result-buttons d-flex justify-content-center">
+        <a href="{{ url_for('quiz_interactive', q_num=1) }}" class="btn">Play Again?</a>
+        <a href="{{ url_for('lesson_page', page_num=1) }}" class="btn">Return to Lessons</a>
+    </div>
+</div>
+{% endblock %}
