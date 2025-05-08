@@ -202,38 +202,43 @@ if (!quizState.answered) quizState.answered = {};
                 }
         
                 function handleAnswer(optionElement) {
-                    const pageNum = optionElement.dataset.page;
-                    const selectedOption = optionElement.dataset.option;
-                    
-                    // Prevent double answers
-                    if (quizState.answered[pageNum]) return;
-                    
-                    disableOptions();
-                    
-                    fetch('/submit_warmup', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            page_num: parseInt(pageNum),
-                            selected: selectedOption
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        showFeedback(data);
-                        
-                        // Update local state
-                        if (data.is_correct) {
-                            quizState.score++;
-                            document.getElementById('current-score').textContent = quizState.score;
-                        }
-                        
-                        quizState.answered[pageNum] = true;
-                        localStorage.setItem('warmupQuiz', JSON.stringify(quizState));
-                    });
-                }
+    const pageNum = optionElement.dataset.page;
+    const selectedOption = optionElement.dataset.option;
+    
+    if (quizState.answered[pageNum]) return;
+    
+    disableOptions();
+    
+    fetch('/submit_warmup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            page_num: parseInt(pageNum),
+            selected: selectedOption
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showFeedback(data);
+        
+        // Replace media with After-Fix.jpg
+        const mediaContainer = document.querySelector('.col-md-3.d-flex');
+        if (mediaContainer) {
+            mediaContainer.innerHTML = `
+                <img src="/static/img/warmup_quiz_photos/After-Fix.jpg" 
+                     style="max-width: 100%; width: 200px; height: auto;">
+            `;
+        }
+        
+        if (data.is_correct) {
+            quizState.score++;
+            document.getElementById('current-score').textContent = quizState.score;
+        }
+        
+        quizState.answered[pageNum] = true;
+        localStorage.setItem('warmupQuiz', JSON.stringify(quizState));
+    });
+}
         
                 function disableOptions() {
                     document.querySelectorAll('.option').forEach(opt => {
