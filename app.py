@@ -160,13 +160,13 @@ def home_page():
     answers.clear()
     return render_template("home.html", user=MY_NAME)
 
+
 @app.route("/quiz")
 @app.route("/quiz/<int:q_num>")
 def quiz_page(q_num=1):
-    # reset total on quiz start
-    session["total_correct_tools"] = 0
+    # start fresh
+    session["scored_questions"] = {}
     return render_template("quiz.html", q_num=q_num)
-
 
 @app.route('/quiz_interactive/<int:q_num>')
 def quiz_interactive(q_num):
@@ -177,19 +177,24 @@ def quiz_interactive(q_num):
                            raw_img=raw_img,
                            correct_tools=correct_tools)
 
-
 @app.route("/submit_interactive", methods=["POST"])
 def submit_interactive():
     data = request.get_json()
-    pts  = data.get("points", 0)
-    session.setdefault("total_score", 0)
-    session["total_score"] += pts
+    qnum = str(data.get("q_num"))
+    points = data.get("points", 0)
+
+    # record *exact* points for this question
+    scored = session.get("scored_questions", {})
+    scored[qnum] = points
+    session["scored_questions"] = scored
+
     return jsonify(success=True)
 
 @app.route("/quiz_result")
 def quiz_result():
-    score = session.get("total_score", 0)
-    return render_template("quiz_result.html", score=score)
+    scored = session.get("scored_questions", {})
+    total = sum(scored.values())
+    return render_template("quiz_result.html", score=total)
 
 
 @app.route("/lesson/<int:page_num>")
