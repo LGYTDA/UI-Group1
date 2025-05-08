@@ -187,22 +187,31 @@
 
 // Automatic reset when leaving the page
 // Automatic reset when leaving the page
+let quizState = JSON.parse(localStorage.getItem('warmupQuiz') || '{}');
 
+// Reset quiz state if starting from page 1
+if ({{ page_num }} === 1) {
+    quizState = { score: 0, answered: {} };
+    localStorage.setItem('warmupQuiz', JSON.stringify(quizState));
+}
+
+// Initialize score and answered state
+if (!quizState.score) quizState.score = 0;
+if (!quizState.answered) quizState.answered = {};
 
            
                 // Initialize client-side storage
-                let quizState = JSON.parse(localStorage.getItem('warmupQuiz') || '{}');
+                //let quizState = JSON.parse(localStorage.getItem('warmupQuiz') || '{}');
                 
                 // Initialize score
-                if (!quizState.score) quizState.score = 0;
-                if (!quizState.answered) quizState.answered = {};
+             
                 
                 // Update display
                 document.getElementById('current-score').textContent = quizState.score;
                 
                 // Disable already answered questions
                 if (quizState.answered[{{ page_num }}]) {
-                    disableOptions();
+                    //disableOptions();
                 }
         
                 function handleAnswer(optionElement) {
