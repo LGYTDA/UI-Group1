@@ -90,7 +90,7 @@
     const correct = {{ correct_tools | tojson }};
     const maxSelect = correct.length;
 
-    // Map tool IDs → combo‐filename fragments
+    // mapping for combo filenames
     const codeMap = {
         black_point: "blk",
         brilliance: "bri",
@@ -99,8 +99,6 @@
         saturation: "sat",
         brightness: "bright"
     };
-
-    // Base path for your combos folder
     const comboBase = "{{ url_for('static', filename='img/icons/combos') }}/";
 
     const checkBtn = document.getElementById("check-btn");
@@ -109,7 +107,7 @@
     const rawImgEl = document.getElementById("raw-img");
     const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
 
-    // Enable “Check” only when exactly maxSelect boxes are checked
+    // Enable “Check” only when exactly maxSelect are checked
     inputs.forEach(i =>
         i.addEventListener("change", () => {
             const cnt = inputs.filter(x => x.checked).length;
@@ -134,10 +132,9 @@
             }
         });
 
-        // Build intermediate preview from only the correct picks so far
+        // Intermediate preview from only the correctly picked ones
         const correctPicked = selected.filter(t => correct.includes(t));
         if (correctPicked.length > 0 && correctPicked.length < maxSelect) {
-            // sort so “hl-bri” & “bri-hl” both work regardless of click order
             const codes = correctPicked
                 .map(t => codeMap[t])
                 .sort()
@@ -145,15 +142,16 @@
             rawImgEl.src = `${comboBase}q${qNum}-${codes}.jpg`;
         }
 
-        // POST partial score back to the server
+        // *** HERE’S THE SCORING FIX *** 
+        // send *exact* number of correct hits
         fetch("/submit_interactive", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ q_num: qNum, selected })
+            body: JSON.stringify({ q_num: qNum, points: correctCount })
         });
 
         if (correctCount === maxSelect) {
-            // all correct → final preview & Next
+            // perfect → final preview + Next
             rawImgEl.src = `${comboBase}edited${qNum}.jpg`;
             inputs.forEach(i => i.disabled = true);
             checkBtn.style.display = "none";
@@ -167,7 +165,7 @@
     });
 
     tryBtn.addEventListener("click", () => {
-        // un‐check & re‐enable only the wrong ones
+        // clear only the wrong ones
         inputs.forEach(i => {
             if (!correct.includes(i.value)) {
                 const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
@@ -176,12 +174,11 @@
                 i.disabled = false;
             }
         });
-        // restore original RAW
         rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
         checkBtn.disabled = true;
         tryBtn.style.display = "none";
         checkBtn.style.display = "inline-block";
     });
-  });
+});
 </script>
 {% endblock %}
