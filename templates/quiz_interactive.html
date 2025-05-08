@@ -16,14 +16,14 @@
 
 <div class="container-fluid px-4">
     <div class="row align-items-start">
-        <!-- RAW photo -->
+        <!-- RAW photo on left -->
         <div class="col-lg-3 col-md-4 col-sm-12 text-center mb-4">
             <h5 class="fw-semibold">RAW Photo</h5>
             <img id="raw-img" src="{{ url_for('static', filename='img/icons/' ~ raw_img) }}" class="img-fluid rounded"
                 style="max-height: 60vh;" alt="RAW Photo">
         </div>
 
-        <!-- Question & tool icons -->
+        <!-- Question & tool icons in the middle -->
         <div class="col-lg-6 col-md-8 col-sm-12">
             <h1 class="page-title mb-2">Image {{ q_num }}</h1>
             <p class="lead fst-italic mb-4">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <!-- EDITED photo -->
+        <!-- EDITED photo on right -->
         <div class="col-lg-3 col-md-12 text-center mb-4">
             <h5 class="fw-semibold">Edited Photo</h5>
             <img id="edited-img" src="{{ url_for('static', filename='img/icons/edited' ~ q_num ~ '.jpg') }}"
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <!-- Controls -->
+    <!-- Controls: Check / Try Again / Next -->
     <div class="text-center mt-4">
         <button id="check-btn" class="btn btn-primary me-2" disabled>
             Check Response
@@ -78,7 +78,9 @@
         </button>
         <a id="next-btn"
             href="{% if q_num < 3 %}{{ url_for('quiz_interactive', q_num=q_num+1) }}{% else %}{{ url_for('quiz_result') }}{% endif %}"
-            class="btn start-btn" style="display:none;">Next</a>
+            class="btn start-btn" style="display:none;">
+            Next
+        </a>
     </div>
 </div>
 
@@ -87,6 +89,8 @@
         const qNum = {{ q_num }};
     const correct = {{ correct_tools | tojson }};
     const maxSelect = correct.length;
+
+    // Map tool IDs → combo‐filename fragments
     const codeMap = {
         black_point: "blk",
         brilliance: "bri",
@@ -95,26 +99,30 @@
         saturation: "sat",
         brightness: "bright"
     };
+
+    // Base path for your combos folder
     const comboBase = "{{ url_for('static', filename='img/icons/combos') }}/";
 
     const checkBtn = document.getElementById("check-btn");
     const tryBtn = document.getElementById("try-again-btn");
     const nextBtn = document.getElementById("next-btn");
-    const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
     const rawImgEl = document.getElementById("raw-img");
+    const inputs = Array.from(document.querySelectorAll('input[name="tools"]'));
 
-    // only enable “Check” when exactly maxSelect are checked
-    inputs.forEach(i => i.addEventListener("change", () => {
-        const cnt = inputs.filter(x => x.checked).length;
-        if (cnt > maxSelect) return i.checked = false;
-        checkBtn.disabled = (cnt !== maxSelect);
-    }));
+    // Enable “Check” only when exactly maxSelect boxes are checked
+    inputs.forEach(i =>
+        i.addEventListener("change", () => {
+            const cnt = inputs.filter(x => x.checked).length;
+            if (cnt > maxSelect) return i.checked = false;
+            checkBtn.disabled = (cnt !== maxSelect);
+        })
+    );
 
     checkBtn.addEventListener("click", () => {
         let correctCount = 0;
         const selected = inputs.filter(i => i.checked).map(i => i.value);
 
-        // highlight circles and lock in correct ones
+        // Highlight & lock in correct picks; mark wrong ones
         selected.forEach(tool => {
             const circle = document.querySelector(`#tool-${tool} + label .icon-circle`);
             if (correct.includes(tool)) {
@@ -126,15 +134,18 @@
             }
         });
 
-        // update raw‐photo preview only if some are correct
-        if (correctCount > 0) {
-            rawImgEl.src = comboBase
-                + "q" + qNum + "-"
-                + selected.map(t => codeMap[t] || t).join("-")
-                + ".jpg";
+        // Build intermediate preview from only the correct picks so far
+        const correctPicked = selected.filter(t => correct.includes(t));
+        if (correctPicked.length > 0 && correctPicked.length < maxSelect) {
+            // sort so “hl-bri” & “bri-hl” both work regardless of click order
+            const codes = correctPicked
+                .map(t => codeMap[t])
+                .sort()
+                .join("-");
+            rawImgEl.src = `${comboBase}q${qNum}-${codes}.jpg`;
         }
 
-        // POST your partial score up to the server
+        // POST partial score back to the server
         fetch("/submit_interactive", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -142,34 +153,35 @@
         });
 
         if (correctCount === maxSelect) {
-            // perfect → show final preview + Next
-            rawImgEl.src = comboBase + "edited" + qNum + ".jpg";
+            // all correct → final preview & Next
+            rawImgEl.src = `${comboBase}edited${qNum}.jpg`;
             inputs.forEach(i => i.disabled = true);
             checkBtn.style.display = "none";
             tryBtn.style.display = "none";
             nextBtn.style.display = "inline-block";
         } else {
-            // not done → allow another try
+            // allow another try
             checkBtn.style.display = "none";
             tryBtn.style.display = "inline-block";
         }
     });
 
     tryBtn.addEventListener("click", () => {
-        // un‐check and re‐enable only the wrong ones
+        // un‐check & re‐enable only the wrong ones
         inputs.forEach(i => {
-            const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
             if (!correct.includes(i.value)) {
+                const circle = document.querySelector(`#tool-${i.value} + label .icon-circle`);
+                circle.classList.remove("bg-wrong");
                 i.checked = false;
                 i.disabled = false;
-                circle.classList.remove("bg-wrong");
             }
         });
+        // restore original RAW
         rawImgEl.src = "{{ url_for('static', filename='img/icons/' ~ raw_img) }}";
         checkBtn.disabled = true;
         tryBtn.style.display = "none";
         checkBtn.style.display = "inline-block";
     });
-});
+  });
 </script>
 {% endblock %}
