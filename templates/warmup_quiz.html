@@ -1,19 +1,6 @@
 {% extends "index.html" %}
 
 {% block content %}
-<nav class="menu-bar mb-4">
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ url_for('lesson_page', page_num=1) }}">Lesson</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('quiz_page', q_num=1) }}">Quiz</a>
-        </li>
-    </ul>
-</nav>
 
 
 
@@ -151,7 +138,7 @@
         <h2 class="mb-3">Warmup Quiz Complete! 🎉</h2>
         <div class="score-card p-4 bg-light rounded">
             <h3>Your Final Score:</h3>
-            <div class="display-4 text-primary">
+            <div class="display-4-text-primary">
                 <span id="final-score">0</span>/{{ total_pages }}
             </div>
         </div>
@@ -292,7 +279,7 @@ if (!quizState.answered) quizState.answered = {};
                 
                 .option:hover {
                     background-color: #f0f0f0;
-                    border-color: #007bff;
+                    border-color:  #ff822b;
                 }
                 
                 .option.disabled {
@@ -314,6 +301,11 @@ if (!quizState.answered) quizState.answered = {};
 .final-score {
     animation: fadeIn 0.5s ease-out;
 }
+.display-4-text-primary{
+    color:#ff822b;
+    font-size:40px;
+
+}
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -321,11 +313,13 @@ if (!quizState.answered) quizState.answered = {};
 }
 
 .score-card {
-    border: 3px solid #007bff;
+    border: 3px solid  #ff822b;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
     max-width: 400px;
     margin: 0 auto;
 }
+
+
             </style>
 
 {% endblock %}
