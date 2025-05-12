@@ -35,9 +35,7 @@
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
             </div>
-            <div id="score-display" class="score-display">
-                Current Score: <span id="current-score">0</span>/{{ total_pages }}
-            </div>
+            <span id="current-score"></span>
             {% endif %}
             {% if page_num==2 %}
             <div class="col-md-3 justify-content-center">
@@ -64,9 +62,7 @@
             <div class="col-md-3 d-flex flex-column justify-content-end">
                 <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
             </div>
-            <div id="score-display" class="score-display">
-                Current Score: <span id="current-score">0</span>/{{ total_pages }}
-            </div>
+            <span id="current-score"></span>
             {% endif %}
             {% if page_num==3 %}
             <div class="col-md-3 justify-content-center">
@@ -95,9 +91,7 @@
                     <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
                 </video>
             </div>
-            <div id="score-display" class="score-display">
-                Current Score: <span id="current-score">0</span>/{{ total_pages }}
-            </div>
+            <span id="current-score"></span>
             {% endif %}
             {% if page_num==4 %}
             <div class="col-md-3 justify-content-center">
@@ -126,9 +120,8 @@
                     <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
                 </video>
             </div>
-            <div id="score-display" class="score-display">
-                Current Score: <span id="current-score">0</span>/{{ total_pages }}
-            </div>
+            <span id="current-score"></span>
+
             {% endif %}
 
         </div>
@@ -194,7 +187,7 @@ if (!quizState.answered) quizState.answered = {};
              
                 
                 // Update display
-                document.getElementById('current-score').textContent = quizState.score;
+                //document.getElementById('current-score').textContent = quizState.score;
                 
                 // Disable already answered questions
                 if (quizState.answered[{{ page_num }}]) {
@@ -232,7 +225,7 @@ if (!quizState.answered) quizState.answered = {};
         
         if (data.is_correct) {
             quizState.score++;
-            document.getElementById('current-score').textContent = quizState.score;
+            //document.getElementById('current-score').textContent = quizState.score;
         }
         
         quizState.answered[pageNum] = true;
