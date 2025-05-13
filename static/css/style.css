@@ -69,9 +69,9 @@
     border-radius: .25rem;
 }
 
-.page-title {
+.site-title {
     color: #ff822b;
-    font-size: 2.5rem;
+    font-size: 4rem;
     margin-bottom: 1rem;
     font-family: 'Orbitron', sans-serif;
 
@@ -741,4 +741,27 @@ background-color: rgba(40, 167, 69, 0.2);
 
 .icon-circle.bg-wrong {
 background-color: rgba(220, 53, 69, 0.2);
+}
+
+.congrats-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ── bright orange buttons with black text ────────────────────────────── */
+.btn-primary,
+.start-btn {
+    background-color: #ff822b !important;
+    border-color: #ff822b !important;
+    color: #000 !important;
+    /* <-- now black */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover,
+.start-btn:hover {
+    background-color: #e6711a !important;
+    transform: translateY(-1px);
 }

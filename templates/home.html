@@ -2,17 +2,20 @@
 {% block content %}
 <div class="row align-items-center">
     <div class="col-12 col-md-6 offset-md-1 text-center text-md-start">
-        <h1 class="page-title">iEdit</h1>
+        <h1 class="site-title display-1">iEdit</h1>
         <ul class="home-list">
             <li>Let’s learn how to make your boring dull pictures into stunning, gorgeous images! :)</li>
             <li>For each tool, we will use this picture as our canvas.</li>
+            <li>You’ll need an iPhone to follow along.</li>
         </ul>
     </div>
 
     <div class="col-12 col-md-5 d-flex flex-column align-items-center">
         <img src="{{ url_for('static', filename='img/canvas.png') }}" alt="Canvas photo"
             class="img-fluid rounded mb-3 canvas-img">
-        <a href="{{ url_for('intro_page') }}" class="btn start-btn mt-3">
+        <a href="{{ url_for('intro_page') }}"
+           class="btn start-btn btn-xl text-uppercase"
+           style="background-color:#ff822b; color:#000; font-size:1.75rem; padding:.75rem 2.5rem;">
             Start
         </a>
     </div>

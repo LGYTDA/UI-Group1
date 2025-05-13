@@ -15,8 +15,8 @@
         <!-- Question & tool icons in the middle -->
         <div class="col-lg-6 col-md-8 col-sm-12">
             <h1 class="page-title mb-2">Image {{ q_num }}</h1>
-            <p class="lead fst-italic mb-4">
-                Which 3 editing tools would we need to use?
+            <p class="lead mb-4" style="font-style: normal;">
+                Select the three editing tools used to create this edited image.
             </p>
             <div class="d-flex flex-wrap justify-content-center">
                 {% for tool in [
@@ -60,7 +60,7 @@
     <!-- Controls: Check / Try Again / Next -->
     <div class="text-center mt-4">
         <button id="check-btn" class="btn btn-primary me-2" disabled>
-            Check Response
+            Check Answer
         </button>
         <button id="try-again-btn" class="btn btn-secondary me-2" style="display:none;">
             Try Again
