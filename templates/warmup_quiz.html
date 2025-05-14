@@ -137,7 +137,7 @@
         </div>
 
         <a href="{{ url_for('quiz_page', q_num=1) }}" 
-           class="btn btn-success"
+           class="btn btn-primary"
            onclick="resetQuiz()">
             Start Main Quiz →
         </a>
@@ -316,7 +316,12 @@ if (!quizState.answered) quizState.answered = {};
     max-width: 400px;
     margin: 0 auto;
 }
-
+.btn-primary{
+    background-color: #ff822b !important;
+}
+.btn-outline-primary{
+    background-color: #ff822b !important;
+}
 
             </style>
 
