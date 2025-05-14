@@ -23,6 +23,9 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
+            </div>
             <div id="right-explanation" class="d-none">
                 <h4>{{ question['right_label'] }}</h4>
                 <p>{{ question['right_explanation'] }}</p>
@@ -30,11 +33,7 @@
             <div id="wrong-explanation" class="d-none">
                 <h4>{{ question['wrong_label'] }}</h4>
                 <p>{{ question['wrong_explanation'] }}</p>
-            </div>
-            <!-- Right Column, Image or Video -->
-            <div class="col-md-3 d-flex flex-column justify-content-end">
-                <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
-            </div>
+            </div>           
             <span id="current-score"></span>
             {% endif %}
             {% if page_num==2 %}
@@ -50,6 +49,9 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
+            </div>
             <div id="right-explanation" class="d-none">
                 <h4>{{ question['right_label'] }}</h4>
                 <p>{{ question['right_explanation'] }}</p>
@@ -57,10 +59,6 @@
             <div id="wrong-explanation" class="d-none">
                 <h4>{{ question['wrong_label'] }}</h4>
                 <p>{{ question['wrong_explanation'] }}</p>
-            </div>
-            <!-- Right Column, Image or Video -->
-            <div class="col-md-3 d-flex flex-column justify-content-end">
-                <img src="{{ url_for('static', filename='img/warmup_quiz_photos/' + question['photo']) }}" style="max-width: 100%; width: 200px; height: auto;">
             </div>
             <span id="current-score"></span>
             {% endif %}
@@ -77,6 +75,11 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <video autoplay loop muted>
+                    <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
+                </video>
+            </div>
             <div id="right-explanation" class="d-none">
                 <h4>{{ question['right_label'] }}</h4>
                 <p>{{ question['right_explanation'] }}</p>
@@ -84,12 +87,6 @@
             <div id="wrong-explanation" class="d-none">
                 <h4>{{ question['wrong_label'] }}</h4>
                 <p>{{ question['wrong_explanation'] }}</p>
-            </div>
-            <!-- Right Column, Image or Video -->
-            <div class="col-md-3 d-flex flex-column justify-content-end">
-                <video autoplay loop muted>
-                    <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
-                </video>
             </div>
             <span id="current-score"></span>
             {% endif %}
@@ -106,6 +103,11 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+                <video autoplay loop muted>
+                    <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
+                </video>
+            </div>
             <div id="right-explanation" class="d-none">
                 <h4>{{ question['right_label'] }}</h4>
                 <p>{{ question['right_explanation'] }}</p>
@@ -115,11 +117,6 @@
                 <p>{{ question['wrong_explanation'] }}</p>
             </div>
             <!-- Right Column, Image or Video -->
-            <div class="col-md-3 d-flex flex-column justify-content-end">
-                <video autoplay loop muted>
-                    <source src="{{ url_for('static', filename='img/' + question['photo']) }}">
-                </video>
-            </div>
             <span id="current-score"></span>
 
             {% endif %}
