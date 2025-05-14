@@ -15,7 +15,7 @@ iPhone Photo Editing 101 — an interactive web app to teach Users to edit photo
 python app.py
 ```
 
-Open your browser at `http://localhost:5000`.
+Open your browser at `http://localhost:5001`.
 
 ## Project Structure
 
