@@ -504,7 +504,6 @@ label[for="jumpToLesson"] {
 
 .quiz-subhead {
     font-size: 1.25rem;
-    font-style: italic;
     color: #555;
 }
 
@@ -556,7 +555,6 @@ body.quiz-intro-page {
 
 .quiz-subhead {
     font-size: 1.25rem;
-    font-style: italic;
     color: #555;
 }
 
@@ -665,7 +663,6 @@ body {
 
 .lead,
 .fst-italic {
-    font-style: italic;
     color: #555;
 }
 
@@ -701,7 +698,6 @@ body {
 }
 
 .subheading {
-    font-family: 'Orbitron', sans-serif;
     font-size: 2rem;
     color: #ff822b;
     margin-bottom: 1.5rem;
@@ -709,7 +705,7 @@ body {
 
 /* Score text */
 .score-text {
-    font-style: italic;
+
     color: #6d6242;
     font-size: 1.25rem;
     margin-bottom: 3rem;
@@ -765,3 +761,94 @@ background-color: rgba(220, 53, 69, 0.2);
     background-color: #e6711a !important;
     transform: translateY(-1px);
 }
+
+.btn-bright-orange {
+    background-color: #ff822b !important;
+    border-color: #e6761f !important;
+    color: #fff;
+}
+
+.btn-brown {
+     background-color: #6d6242 !important;
+     border-color: #e6761f !important;
+     color: #fff;
+}
+
+.btn-bright-orange:hover {
+    background-color: #ff944d !important;
+    border-color: #e6761f !important;
+}
+
+/* Jump to Dropdown */
+.themed-select {
+    background-color: #ffe5cc;
+    border: 2px solid #ff822b;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: #000;
+    font-weight: 600;
+    align-items: center;
+}
+
+input[type="range"] {
+  -webkit-appearance: none; /* Remove default styling (for Chrome/Safari) */
+  width: 100%;
+  height: 6px;
+  background: #ff6600; /* bright orange track */
+  border-radius: 3px;
+  outline: none;
+}
+
+/* Chrome, Safari, Edge */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ff6600;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  margin-top: -7px; /* Align thumb with track */
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ff6600;
+  cursor: pointer;
+  border: none;
+}
+
+/* Track color for Firefox */
+input[type="range"]::-moz-range-track {
+  background: #ff6600;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* IE/Edge (legacy) */
+input[type="range"]::-ms-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ff6600;
+  cursor: pointer;
+  border: none;
+}
+
+input[type="range"]::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower,
+input[type="range"]::-ms-fill-upper {
+  background: #ff6600;
+}
+
+
